@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'>
+<channel>
+<atom:link href='http://agynamix.de/' rel='self' type='application/rss+xml'/>
+<generator>
+clj-rss
+</generator>
+<title>
+AGYNAMIX
+</title>
+<link>
+http://agynamix.de/
+</link>
+<description>
+This blog is awesome
+</description>
+<lastBuildDate>
+Wed, 29 Jul 2015 20:47:18 +0200
+</lastBuildDate>
+<item>
+<guid>
+http://agynamix.de/posts/2015-07-29-first-post.html
+</guid>
+<link>
+http://agynamix.de/posts/2015-07-29-first-post.html
+</link>
+<title>
+A First Post
+</title>
+<description>
+&lt;h3&gt;&lt;a name=&quot;this&amp;#95;is&amp;#95;the&amp;#95;place&amp;#95;that&amp;#95;needs&amp;#95;to&amp;#95;be&amp;#95;filled&amp;#95;with&amp;#95;cool&amp;#95;posts&quot;&gt;&lt;/a&gt;This is the place that needs to be filled with cool posts&lt;/h3&gt;&lt;p&gt;Really need to write something.&lt;/p&gt;
+</description>
+<pubDate>
+Wed, 29 Jul 2015 00:00:00 +0200
+</pubDate>
+</item>
+</channel>
+</rss>

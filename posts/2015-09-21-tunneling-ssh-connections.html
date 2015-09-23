@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>AGYNAMIX: Terms</title>
+  <title>AGYNAMIX: Tunneling SSH Connections</title>
 
   <!-- Bootstrap Core CSS -->
   <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -102,14 +102,49 @@
 
   <div id="content">
     
-<div id="custom-page">
-  <div id="page-header">
-    <h2>Terms</h2>
-  </div>
-  
-  <p> All content provided is for informational purposes only. The articles and posts on this website are my own and don't necessarily represent the positions, strategies, or opinions of my employer or its subsidiaries. I make no representations as to the accuracy or completeness of any information found here or by following any links. I will not be liable for any errors or omissions in this information nor for the availability of this information. I will not be liable for any losses, injuries, or damages from the display or use of this information.</p><h2><a name="privacy&#95;policy"></a>Privacy Policy</h2><p> The privacy of my visitors is extremely important. This Privacy Policy outlines the types of personal information that is received and collected and how it is used.</p><p> First and foremost, I will never share your email address or any other personal information to anyone without your direct consent.</p><h3><a name="log&#95;files"></a>Log Files</h3><p> Like many other websites, this site uses log files to help learn about when, from where, and how often traffic flows to this site. The information in these log files include:</p><ul><li>Internet Protocol addresses (IP)</li><li>Types of browser</li><li>Internet Service Provider (ISP)</li><li>Date and time stamp</li><li>Referring and exit pages</li><li>Number of clicks All of this information is not linked to anything that is personally identifiable.<h3><a name="cookies&#95;and&#95;web&#95;beacons"></a>Cookies and Web Beacons</h3> When you visit this site "convenience" cookies are stored on your computer when you submit a comment to help you log in faster to <a href='http://disqus.com'>Disqus</a> the next time you leave a comment. Third-party advertisers may also place and read cookies on your browser and/or use web beacons to collect information. This site has no access or control over these cookies. You should review the respective privacy policies on any and all third-party ad servers for more information regarding their practices and how to opt-out. If you wish to disable cookies, you may do so through your web browser options. Instructions for doing so can be found on the specific web browsers' websites.<h4><a name="amazon"></a>Amazon</h4> Amazon, a third party affiliate marketing network, uses cookies to help make sure I get a commission when you buy a product after clicking on a link or ad banner that takes you to the site of one of their merchants. You can read <a href='http://www.amazon.com/gp/help/customer/display.html?nodeId=468496'>Amazon's Privacy Policy</a>.<h4><a name="google&#95;adsense"></a>Google Adsense</h4> Google Adsense, a third party affiliate marketing network, uses cookies to help make sure I get a commission when you buy a product after clicking on a link or ad banner that takes you to the site of one of their merchants. You can read <a href='http://support.google.com/adsense/bin/answer.py?hl=en&answer=48182'>Google Adsense Privacy Policy</a>.<h4><a name="google&#95;analytics"></a>Google Analytics</h4> Google Analytics is a web analytics tool I use to help understand how visitors engage with this website. It reports website trends using cookies and web beacons without identifying individual visitors. You can read <a href='http://www.google.com/analytics/learn/privacy.html'>Google Analytics Privacy Policy</a>.<h2><a name="disclosure&#95;policy"></a>Disclosure Policy</h2> I make money on this website through affiliate programs. If you click an affiliate link or ad banner and buy the product, you help support this website because I'll get a percentage of that sale. Currently I'm an affiliate for Amazon and Google Adsense. What this means for you:</li><li>I do not and will not recommend a product just because I'm an affiliate.</li><li>I became an affiliate to earn some revenue towards the costs of running and maintaining this website. Where I have direct control over which ads are served on this website I offer only products that are directly related to the topic of this website and products that a reader/subscriber would have a genuine interest in or need of.</li><li>I do not recommend products just for the sake of making money.</li><li>I recommend products because I think they are valuable to my readers.</li><li>I do not let the compensation I receive influence the content, topics, posts, or opinions expressed on this website.</li><li>I respect and value my readers too much to write anything other than my own genuine and objective opinions and advice. Just like this website, my Disclosure Policy is a work in progress. As the revenue streams evolve, so will this page.</li></ul>
+<div id="post">
+    <div class="post-header">
+    <div id="post-meta" class="row">
+        <div class="col-lg-6">September 21, 2015</div>
+        
+    </div>
+    <h2>Tunneling SSH Connections</h2>
+</div>
+<div>
+    
+    <h2><a name="problem"></a>Problem</h2>You want to access a firewalled server from your local machine which has a dynamic IP assigned by your internet provider that changes regularly. The server you want to access has a firewall that whitelists the IP addresses that are allowed to access.<h2><a name="solution"></a>Solution</h2>The solution I found working for me is to tunnel all traffic to these restricted servers through a machine that has a fixed IP address, in my case a web server I use for lots of other purposes.You should be able to ssh into that server and add ssh keys. If the firewalled machine does not have a dns’ed IP address you may need to edit your remote server’s <code>/etc/hosts</code> file to add these servers there.<h2><a name="browser&#95;access"></a>Browser Access</h2>In order to access a firewalled server with a browser, I’m using a SOCKS proxy that tunnels traffic through my remote server:<pre><code>ssh -CN -D 9050 user@my-remote-server
+</code></pre><p>This creates a SOCKS proxy that you can access at <a href='localhost:9050'>localhost:9050</a>. I found it easiest to use with Firefox and the FoxyProxy plugin. You can give that plugin a url mask- if that matches it will use the SOCKS proxy, otherwise it will use the default connection.</p><p>Here are my settings for the SOCKS proxy within FoxyProxy:</p><p><img src="/img/posts/2015-09-21/foxyproxy&#95;1.png" alt="FoxyProxy SOCKS Config" /></p><p><img src="/img/posts/2015-09-21/foxyproxy&#95;2.png" alt="FoxyProxy Details" /></p><h2><a name="ssh&#95;access"></a>SSH Access</h2>Establishing ssh access is a tad bit more involved, but not too much. It also uses a ssh tunnel through the fixed IP remote server.I set up a ssh config that allows me to type <code>ssh firewalled-server</code> and get a connection from my dynamic IP, without having to login to the remote machine and open another ssh session from there.<p>In your <code>&#126;/.ssh</code> directory create a <code>config</code> file that will contain entries like the following, separated by a blank line:</p><pre><code>Host firewalled-server
+Hostname firewalled-server
+User my-username
+ForwardAgent yes
+Port 22
+ProxyCommand ssh my-username@my-remote-server /bin/nc %h %p
+</code></pre><p>On your remote server you should setup key based access by adding a ssh key to the authorized_keys file.</p><p>If the name of your firewalled server is not known through public dns you need to add the name(s) of your firewalled servers to the <code>/etc/hosts</code> file.</p><p>Then, from your remote server, you should ensure you can ssh into the firewalled server, have added ssh key based access and accepted the fingerprint of the firewalled server so it’s added to the <code>known&#95;hosts</code> file.</p><p>If it works to log in from your local machine to your remote server and from there login via ssh key to the firewalled server, you should be able to directly hit the firewalled server via:</p><pre><code>ssh firewalled-server
+</code></pre><p>Unless, of course, we forgot something…</p>
+</div>
 
-  
+
+    <div id="prev-next" class="hidden-print">
+        
+        <a href="/posts/2015-09-22-doo-and-figwheel.html">&laquo; ClojureScript Testing with Doo and Figwheel</a>
+        
+        
+        <a class="right pull-right" href="/posts/2015-07-31-a-new-blog.html">A New Time, a New Blog &raquo;</a>
+        
+    </div>
+
+    
+    <div id="disqus_thread" style="margin-top:20px;" class="hidden-print"></div>
+    <script type="text/javascript">
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//agynamix.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+
+
 </div>
 
   </div>

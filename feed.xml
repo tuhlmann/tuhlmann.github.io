@@ -15,8 +15,130 @@ http://agynamix.de/
 This blog is awesome
 </description>
 <lastBuildDate>
-Thu, 30 Jul 2015 08:56:25 +0200
+Wed, 23 Sep 2015 07:38:11 +0200
 </lastBuildDate>
+<item>
+<guid>
+http://agynamix.de/posts/2015-09-22-doo-and-figwheel.html
+</guid>
+<link>
+http://agynamix.de/posts/2015-09-22-doo-and-figwheel.html
+</link>
+<title>
+ClojureScript Testing with Doo and Figwheel
+</title>
+<description>
+&lt;p&gt;These days I was playing with strategies to run ClojureScript tests. Information about this particular topic is not too easy to find, so here's a short list of posts I found particularly useful:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;a href='http://www.lispcast.com/testing-clojurescript'&gt;How can you test ClojureScript applications and libraries?&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href='https://nvbn.github.io/2015/06/08/cljs-test/'&gt;Testing ClojureScript code with cljs.test with phantomjs and figwheel&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;The Unit test library used in these cases is &lt;code&gt;cljs.test&lt;/code&gt;. One way to run the tests is to add a test and runner configuration to your &lt;code&gt;project.clj&lt;/code&gt; (see the second link for an example).&lt;/p&gt;&lt;p&gt;Another way is to use &lt;a href='https://github.com/bensu/doo'&gt;lein-doo&lt;/a&gt; as a way to configure all kinds of different test runners, like Karma, SlimerJs or PhantomJs, and also watch your source directories and run tests on file change.&lt;/p&gt;&lt;p&gt;I was playing with that Doo configuration in my project and ran into a strange error.&lt;/p&gt;&lt;p&gt;My project uses a figwheel configuration, and the funny thing is, figwheel barks on this piece of Doo config:&lt;/p&gt;&lt;p&gt;&lt;code&gt;:main 'example.runner&lt;/code&gt;&lt;/p&gt;&lt;p&gt;with the exception:&lt;/p&gt;&lt;pre&gt;&lt;code&gt;java.lang.ClassCastException:
+clojure.lang.PersistentList cannot be cast to
+clojure.lang.Named
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;To get around this problem, write the Doo config like this:&lt;/p&gt;&lt;p&gt;&lt;code&gt;:main &amp;quot;example.runner&amp;quot;&lt;/code&gt;&lt;/p&gt;&lt;p&gt;Figwheel works again and even Doo still works :)&lt;/p&gt;&lt;p&gt;Hope this might help somebody...&lt;/p&gt;
+</description>
+<pubDate>
+Tue, 22 Sep 2015 00:00:00 +0200
+</pubDate>
+</item>
+<item>
+<guid>
+http://agynamix.de/posts/2015-09-21-tunneling-ssh-connections.html
+</guid>
+<link>
+http://agynamix.de/posts/2015-09-21-tunneling-ssh-connections.html
+</link>
+<title>
+Tunneling SSH Connections
+</title>
+<description>
+&lt;h2&gt;&lt;a name=&quot;problem&quot;&gt;&lt;/a&gt;Problem&lt;/h2&gt;You want to access a firewalled server from your local machine which has a dynamic IP assigned by your internet provider that changes regularly. The server you want to access has a firewall that whitelists the IP addresses that are allowed to access.&lt;h2&gt;&lt;a name=&quot;solution&quot;&gt;&lt;/a&gt;Solution&lt;/h2&gt;The solution I found working for me is to tunnel all traffic to these restricted servers through a machine that has a fixed IP address, in my case a web server I use for lots of other purposes.You should be able to ssh into that server and add ssh keys. If the firewalled machine does not have a dns’ed IP address you may need to edit your remote server’s &lt;code&gt;/etc/hosts&lt;/code&gt; file to add these servers there.&lt;h2&gt;&lt;a name=&quot;browser&amp;#95;access&quot;&gt;&lt;/a&gt;Browser Access&lt;/h2&gt;In order to access a firewalled server with a browser, I’m using a SOCKS proxy that tunnels traffic through my remote server:&lt;pre&gt;&lt;code&gt;ssh -CN -D 9050 user@my-remote-server
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;This creates a SOCKS proxy that you can access at &lt;a href='localhost:9050'&gt;localhost:9050&lt;/a&gt;. I found it easiest to use with Firefox and the FoxyProxy plugin. You can give that plugin a url mask- if that matches it will use the SOCKS proxy, otherwise it will use the default connection.&lt;/p&gt;&lt;p&gt;Here are my settings for the SOCKS proxy within FoxyProxy:&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;/img/posts/2015-09-21/foxyproxy&amp;#95;1.png&quot; alt=&quot;FoxyProxy SOCKS Config&quot; /&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;/img/posts/2015-09-21/foxyproxy&amp;#95;2.png&quot; alt=&quot;FoxyProxy Details&quot; /&gt;&lt;/p&gt;&lt;h2&gt;&lt;a name=&quot;ssh&amp;#95;access&quot;&gt;&lt;/a&gt;SSH Access&lt;/h2&gt;Establishing ssh access is a tad bit more involved, but not too much. It also uses a ssh tunnel through the fixed IP remote server.I set up a ssh config that allows me to type &lt;code&gt;ssh firewalled-server&lt;/code&gt; and get a connection from my dynamic IP, without having to login to the remote machine and open another ssh session from there.&lt;p&gt;In your &lt;code&gt;&amp;#126;/.ssh&lt;/code&gt; directory create a &lt;code&gt;config&lt;/code&gt; file that will contain entries like the following, separated by a blank line:&lt;/p&gt;&lt;pre&gt;&lt;code&gt;Host firewalled-server
+Hostname firewalled-server
+User my-username
+ForwardAgent yes
+Port 22
+ProxyCommand ssh my-username@my-remote-server /bin/nc %h %p
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;On your remote server you should setup key based access by adding a ssh key to the authorized_keys file.&lt;/p&gt;&lt;p&gt;If the name of your firewalled server is not known through public dns you need to add the name(s) of your firewalled servers to the &lt;code&gt;/etc/hosts&lt;/code&gt; file.&lt;/p&gt;&lt;p&gt;Then, from your remote server, you should ensure you can ssh into the firewalled server, have added ssh key based access and accepted the fingerprint of the firewalled server so it’s added to the &lt;code&gt;known&amp;#95;hosts&lt;/code&gt; file.&lt;/p&gt;&lt;p&gt;If it works to log in from your local machine to your remote server and from there login via ssh key to the firewalled server, you should be able to directly hit the firewalled server via:&lt;/p&gt;&lt;pre&gt;&lt;code&gt;ssh firewalled-server
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Unless, of course, we forgot something…&lt;/p&gt;
+</description>
+<pubDate>
+Mon, 21 Sep 2015 00:00:00 +0200
+</pubDate>
+</item>
+<item>
+<guid>
+http://agynamix.de/posts/2015-07-31-a-new-blog.html
+</guid>
+<link>
+http://agynamix.de/posts/2015-07-31-a-new-blog.html
+</link>
+<title>
+A New Time, a New Blog
+</title>
+<description>
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;After torching my old site
+(Wordpress, vulnerable, was compromised, bla, bla)
+I was long thinking about what to do with the new.
+I wanted to make it easier for me to publish new posts, and a bit
+more tech savvy, that is. And I wanted to have a static site
+that does not expose my server to all the world.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;I first looked at &lt;a href=&quot;http://jekyllrb.com/&quot;&gt;Jekyll&lt;/a&gt; and
+&lt;a href=&quot;http://octopress.org/&quot;&gt;Octopress&lt;/a&gt; as they seemed to be the big
+players in the field of static site generators.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;They worked ok. However I didn&amp;#8217;t want to learn Ruby if I wanted
+to change some functionality. They also seemed complicated for
+what I had in mind.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;So after a while I ended up with &lt;a href=&quot;http://cryogenweb.org/&quot;&gt;Cryogen&lt;/a&gt;,
+an easy to use and fairly simple static site generator written
+in &lt;a href=&quot;http://clojure.org/&quot;&gt;Clojure&lt;/a&gt;. Since Clojure is the language
+I want to dive in deeper that seems the perfect fit for me.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;To start a new website with cryogen, first install &lt;a href=&quot;http://leiningen.org/&quot;&gt;Leiningen&lt;/a&gt;,
+the Clojure build tool, and then type:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;title&quot;&gt;bash&lt;/div&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;$ lein new cryogen my-site
+$ lein ring server&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;This create a new Clojure project from the &quot;cryogen&quot; template.
+&lt;code&gt;lein ring server&lt;/code&gt; starts listening for changes in the posts and pages and
+creates a web server that listens at &lt;code&gt;&lt;a href=&quot;http://localhost:3000&quot; class=&quot;bare&quot;&gt;http://localhost:3000&lt;/a&gt;&lt;/code&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;As soon as you change contents or add a page it will re-create the static site in
+&lt;code&gt;my-site/resources/public&lt;/code&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Oh, and you can write your posts and pages in Markdown or Asciidoc. To use Asciidoc just
+add the &lt;a href=&quot;https://github.com/cryogen-project/cryogen-asciidoc&quot;&gt;appropriate plugin&lt;/a&gt; to the &lt;code&gt;my-site&lt;/code&gt; project.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;To publish the site simply copy the contents of this directory to your DocumentRoot
+or a Github Pages repository, etc.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;One thing I&amp;#8217;m thinking about is adding client side search to my site via
+something like &lt;a href=&quot;http://lunrjs.com/&quot;&gt;lunr.js&lt;/a&gt;, which seems like a cool
+project.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;So here it is, a new site, and a new blog. I hope due to a simple publishing chain
+I will keep on posting stuff.&lt;/p&gt;
+&lt;/div&gt;
+</description>
+<pubDate>
+Fri, 31 Jul 2015 00:00:00 +0200
+</pubDate>
+</item>
 <item>
 <guid>
 http://agynamix.de/posts/2015-07-29-first-post.html

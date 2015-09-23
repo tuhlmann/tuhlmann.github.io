@@ -38,8 +38,6 @@ body {
 p {
   line-height: 1.5;
   margin: 30px 0; }
-  p a {
-    text-decoration: underline; }
 
 h1,
 h2,
@@ -431,6 +429,14 @@ body {
 
 .navbar-default .navbar-nav > .active > a {
   background-color: inherit !important; }
+
+#content img {
+  max-width: 100%; }
+#content a[href*=http]::after {
+  font-family: FontAwesome;
+  color: lightgray;
+  font-size: 9pt;
+  content: " \f08e"; }
 
 @media print {
   .hidden-print {

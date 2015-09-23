@@ -15,7 +15,84 @@ http://agynamix.de/
 This blog is awesome
 </description>
 <lastBuildDate>
-Thu, 30 Jul 2015 08:56:25 +0200
+Wed, 23 Sep 2015 07:38:11 +0200
 </lastBuildDate>
+<item>
+<guid>
+http://agynamix.de/posts/2015-07-31-a-new-blog.html
+</guid>
+<link>
+http://agynamix.de/posts/2015-07-31-a-new-blog.html
+</link>
+<title>
+A New Time, a New Blog
+</title>
+<description>
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;After torching my old site
+(Wordpress, vulnerable, was compromised, bla, bla)
+I was long thinking about what to do with the new.
+I wanted to make it easier for me to publish new posts, and a bit
+more tech savvy, that is. And I wanted to have a static site
+that does not expose my server to all the world.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;I first looked at &lt;a href=&quot;http://jekyllrb.com/&quot;&gt;Jekyll&lt;/a&gt; and
+&lt;a href=&quot;http://octopress.org/&quot;&gt;Octopress&lt;/a&gt; as they seemed to be the big
+players in the field of static site generators.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;They worked ok. However I didn&amp;#8217;t want to learn Ruby if I wanted
+to change some functionality. They also seemed complicated for
+what I had in mind.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;So after a while I ended up with &lt;a href=&quot;http://cryogenweb.org/&quot;&gt;Cryogen&lt;/a&gt;,
+an easy to use and fairly simple static site generator written
+in &lt;a href=&quot;http://clojure.org/&quot;&gt;Clojure&lt;/a&gt;. Since Clojure is the language
+I want to dive in deeper that seems the perfect fit for me.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;To start a new website with cryogen, first install &lt;a href=&quot;http://leiningen.org/&quot;&gt;Leiningen&lt;/a&gt;,
+the Clojure build tool, and then type:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;title&quot;&gt;bash&lt;/div&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;$ lein new cryogen my-site
+$ lein ring server&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;This create a new Clojure project from the &quot;cryogen&quot; template.
+&lt;code&gt;lein ring server&lt;/code&gt; starts listening for changes in the posts and pages and
+creates a web server that listens at &lt;code&gt;&lt;a href=&quot;http://localhost:3000&quot; class=&quot;bare&quot;&gt;http://localhost:3000&lt;/a&gt;&lt;/code&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;As soon as you change contents or add a page it will re-create the static site in
+&lt;code&gt;my-site/resources/public&lt;/code&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Oh, and you can write your posts and pages in Markdown or Asciidoc. To use Asciidoc just
+add the &lt;a href=&quot;https://github.com/cryogen-project/cryogen-asciidoc&quot;&gt;appropriate plugin&lt;/a&gt; to the &lt;code&gt;my-site&lt;/code&gt; project.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;To publish the site simply copy the contents of this directory to your DocumentRoot
+or a Github Pages repository, etc.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;One thing I&amp;#8217;m thinking about is adding client side search to my site via
+something like &lt;a href=&quot;http://lunrjs.com/&quot;&gt;lunr.js&lt;/a&gt;, which seems like a cool
+project.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;So here it is, a new site, and a new blog. I hope due to a simple publishing chain
+I will keep on posting stuff.&lt;/p&gt;
+&lt;/div&gt;
+</description>
+<pubDate>
+Fri, 31 Jul 2015 00:00:00 +0200
+</pubDate>
+</item>
 </channel>
 </rss>

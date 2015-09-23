@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>AGYNAMIX: Terms</title>
+  <title>AGYNAMIX: A New Time, a New Blog</title>
 
   <!-- Bootstrap Core CSS -->
   <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -102,14 +102,108 @@
 
   <div id="content">
     
-<div id="custom-page">
-  <div id="page-header">
-    <h2>Terms</h2>
-  </div>
-  
-  <p> All content provided is for informational purposes only. The articles and posts on this website are my own and don't necessarily represent the positions, strategies, or opinions of my employer or its subsidiaries. I make no representations as to the accuracy or completeness of any information found here or by following any links. I will not be liable for any errors or omissions in this information nor for the availability of this information. I will not be liable for any losses, injuries, or damages from the display or use of this information.</p><h2><a name="privacy&#95;policy"></a>Privacy Policy</h2><p> The privacy of my visitors is extremely important. This Privacy Policy outlines the types of personal information that is received and collected and how it is used.</p><p> First and foremost, I will never share your email address or any other personal information to anyone without your direct consent.</p><h3><a name="log&#95;files"></a>Log Files</h3><p> Like many other websites, this site uses log files to help learn about when, from where, and how often traffic flows to this site. The information in these log files include:</p><ul><li>Internet Protocol addresses (IP)</li><li>Types of browser</li><li>Internet Service Provider (ISP)</li><li>Date and time stamp</li><li>Referring and exit pages</li><li>Number of clicks All of this information is not linked to anything that is personally identifiable.<h3><a name="cookies&#95;and&#95;web&#95;beacons"></a>Cookies and Web Beacons</h3> When you visit this site "convenience" cookies are stored on your computer when you submit a comment to help you log in faster to <a href='http://disqus.com'>Disqus</a> the next time you leave a comment. Third-party advertisers may also place and read cookies on your browser and/or use web beacons to collect information. This site has no access or control over these cookies. You should review the respective privacy policies on any and all third-party ad servers for more information regarding their practices and how to opt-out. If you wish to disable cookies, you may do so through your web browser options. Instructions for doing so can be found on the specific web browsers' websites.<h4><a name="amazon"></a>Amazon</h4> Amazon, a third party affiliate marketing network, uses cookies to help make sure I get a commission when you buy a product after clicking on a link or ad banner that takes you to the site of one of their merchants. You can read <a href='http://www.amazon.com/gp/help/customer/display.html?nodeId=468496'>Amazon's Privacy Policy</a>.<h4><a name="google&#95;adsense"></a>Google Adsense</h4> Google Adsense, a third party affiliate marketing network, uses cookies to help make sure I get a commission when you buy a product after clicking on a link or ad banner that takes you to the site of one of their merchants. You can read <a href='http://support.google.com/adsense/bin/answer.py?hl=en&answer=48182'>Google Adsense Privacy Policy</a>.<h4><a name="google&#95;analytics"></a>Google Analytics</h4> Google Analytics is a web analytics tool I use to help understand how visitors engage with this website. It reports website trends using cookies and web beacons without identifying individual visitors. You can read <a href='http://www.google.com/analytics/learn/privacy.html'>Google Analytics Privacy Policy</a>.<h2><a name="disclosure&#95;policy"></a>Disclosure Policy</h2> I make money on this website through affiliate programs. If you click an affiliate link or ad banner and buy the product, you help support this website because I'll get a percentage of that sale. Currently I'm an affiliate for Amazon and Google Adsense. What this means for you:</li><li>I do not and will not recommend a product just because I'm an affiliate.</li><li>I became an affiliate to earn some revenue towards the costs of running and maintaining this website. Where I have direct control over which ads are served on this website I offer only products that are directly related to the topic of this website and products that a reader/subscriber would have a genuine interest in or need of.</li><li>I do not recommend products just for the sake of making money.</li><li>I recommend products because I think they are valuable to my readers.</li><li>I do not let the compensation I receive influence the content, topics, posts, or opinions expressed on this website.</li><li>I respect and value my readers too much to write anything other than my own genuine and objective opinions and advice. Just like this website, my Disclosure Policy is a work in progress. As the revenue streams evolve, so will this page.</li></ul>
+<div id="post">
+    <div class="post-header">
+    <div id="post-meta" class="row">
+        <div class="col-lg-6">July 31, 2015</div>
+        
+    </div>
+    <h2>A New Time, a New Blog</h2>
+</div>
+<div>
+    
+    <div class="paragraph">
+<p>After torching my old site
+(Wordpress, vulnerable, was compromised, bla, bla)
+I was long thinking about what to do with the new.
+I wanted to make it easier for me to publish new posts, and a bit
+more tech savvy, that is. And I wanted to have a static site
+that does not expose my server to all the world.</p>
+</div>
+<div class="paragraph">
+<p>I first looked at <a href="http://jekyllrb.com/">Jekyll</a> and
+<a href="http://octopress.org/">Octopress</a> as they seemed to be the big
+players in the field of static site generators.</p>
+</div>
+<div class="paragraph">
+<p>They worked ok. However I didn&#8217;t want to learn Ruby if I wanted
+to change some functionality. They also seemed complicated for
+what I had in mind.</p>
+</div>
+<div class="paragraph">
+<p>So after a while I ended up with <a href="http://cryogenweb.org/">Cryogen</a>,
+an easy to use and fairly simple static site generator written
+in <a href="http://clojure.org/">Clojure</a>. Since Clojure is the language
+I want to dive in deeper that seems the perfect fit for me.</p>
+</div>
+<div class="paragraph">
+<p>To start a new website with cryogen, first install <a href="http://leiningen.org/">Leiningen</a>,
+the Clojure build tool, and then type:</p>
+</div>
+<div class="listingblock">
+<div class="title">bash</div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ lein new cryogen my-site
+$ lein ring server</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This create a new Clojure project from the "cryogen" template.
+<code>lein ring server</code> starts listening for changes in the posts and pages and
+creates a web server that listens at <code><a href="http://localhost:3000" class="bare">http://localhost:3000</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>As soon as you change contents or add a page it will re-create the static site in
+<code>my-site/resources/public</code>.</p>
+</div>
+<div class="paragraph">
+<p>Oh, and you can write your posts and pages in Markdown or Asciidoc. To use Asciidoc just
+add the <a href="https://github.com/cryogen-project/cryogen-asciidoc">appropriate plugin</a> to the <code>my-site</code> project.</p>
+</div>
+<div class="paragraph">
+<p>To publish the site simply copy the contents of this directory to your DocumentRoot
+or a Github Pages repository, etc.</p>
+</div>
+<div class="paragraph">
+<p>One thing I&#8217;m thinking about is adding client side search to my site via
+something like <a href="http://lunrjs.com/">lunr.js</a>, which seems like a cool
+project.</p>
+</div>
+<div class="paragraph">
+<p>So here it is, a new site, and a new blog. I hope due to a simple publishing chain
+I will keep on posting stuff.</p>
+</div>
+</div>
 
-  
+<div id="post-tags">
+    <b>Tags: </b>
+    
+    <a href="/tags/cryogen.html">cryogen</a>
+    
+</div>
+
+
+    <div id="prev-next" class="hidden-print">
+        
+        <a href="/posts/2015-09-21-tunneling-ssh-connections.html">&laquo; Tunneling SSH Connections</a>
+        
+        
+        <a class="right pull-right" href="/posts/2015-07-29-first-post.html">A First Post &raquo;</a>
+        
+    </div>
+
+    
+    <div id="disqus_thread" style="margin-top:20px;" class="hidden-print"></div>
+    <script type="text/javascript">
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//agynamix.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+
+
 </div>
 
   </div>

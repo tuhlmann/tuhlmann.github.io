@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>AGYNAMIX: Use ASP.NET Forms Authentication with local Windows Users</title>
+
+  <!-- Bootstrap Core CSS -->
+  <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+  <!-- Custom CSS -->
+  <link href="../css/clean-blog.css" rel="stylesheet" type="text/css" />
+
+  <!-- Custom Fonts -->
+  <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+  <!--<link href='http://fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700' rel='stylesheet'
+        type='text/css'>-->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
+
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header page-scroll">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/index.html">AGYNAMIX</a>
+      </div>
+
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li ><a href="/index.html"><i class="fa fa-lg fa-home"></i></a></li>
+          
+          <li >
+            <a href="/pages/about.html">About</a>
+          </li>
+          
+          <li ><a href="/archives.html">Posts</a></li>
+          <li><a href="/feed.xml"><i class="fa fa-lg fa-rss"></i></a></li>
+        </ul>
+      </div><!--/.nav-collapse -->
+
+      <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+  </nav>
+
+  <!-- Page Header -->
+  <!-- Set your background image for this header on the line below. -->
+  
+  <header class="intro-header hidden-print"
+          style="background-image: url('/img/home-bg.jpg')" >
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+          <div class="site-heading">
+            <h1>AGYNAMIX&reg;.</h1>
+            <hr class="small">
+            <span class="subheading">Passionate Software.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+  
+
+  <!-- Post Content -->
+  <article>
+    <div class="container">
+      <div class="row">
+
+        
+
+<div class="col-sm-9 col-xs-12" id="main-content">
+
+  <span id="sidebar-toggle" class="hidden-print sidebar-toggle"></span>
+
+  <div id="content">
+    
+<div id="post">
+    <div class="post-header">
+    <div id="post-meta" class="row">
+        <div class="col-lg-6">May 8, 2010</div>
+        
+    </div>
+    <h2>Use ASP.NET Forms Authentication with local Windows Users</h2>
+</div>
+<div>
+    
+    <h2>Summary</h2><p>This article shows you how to build your own MembershipProvider to authenticate users of your ASP.NET 2.0 web application against Windows user accounts using Forms authentication and the Win32 API method LogonUser. A few years back I developed a small ASP.NET 2.0 application for my customer. The requirement at that time was to authenticate users against ActiveDirectory. We did this using Forms authentication and the ADMembershipProvider that comes with the .NET framework. You would use the Web.config configuration file to define the access string and other parameters for ActiveDirectory access... But that's not the topic of this post... Anyway a few weeks ago that same customer asked me to change the authentication in order to validate against Windows user accounts. At first I had a hard time finding a way to use forms authentication in combination with Windows accounts. But eventually I found a few websites (for instance: here) that gave me the right clue: There is a Win32 function called LogonUser that can be used to validate the users credentials. I used that API method in a self made MembershipProvider (WinNTMembershipProvider) to implement an exchangeable authentication mechanism. Then, in Web.config I referenced that new MembershipProvider. That way I didn't have to change anything within the existing application, just a configuration change. Here's the essential part of the MembershipProvider that uses the LogonUser API method: You first need to announce the use of the LogonUser method:</p><pre><code>&#91;code lang=&quot;csharp&quot;&#93; &#91;DllImport&#40;&quot;ADVAPI32.dll&quot;, EntryPoint = &quot;LogonUserW&quot;, SetLastError = true, CharSet = CharSet.Auto&#41;&#93; public static extern bool LogonUser&#40;string lpszUsername, string lpszDomain, string lpszPassword, int dwLogonType, int dwLogonProvider, ref IntPtr phToken&#41;; &#91;/code&#93;
+</code></pre><p>Then, within the ValidateUser method you try to log that user into the system:</p><pre><code>&#91;code lang=&quot;csharp&quot;&#93; public override bool ValidateUser&#40;string strName, string strPassword&#41; { bool bSuccessfulLogin = false; IntPtr token = IntPtr.Zero; //userName, domainName and Password parameters are very obvious. /&#42; dwLogonType &#40;3rd parameter&#41;: I used LOGON32&#95;LOGON&#95;INTERACTIVE, This logon type is intended for users who will be interactively using the computer, such as a user being logged on by a terminal server, remote shell, or similar process. This logon type has the additional expense of caching logon information for disconnected operations. For more details about this parameter please see http://msdn.microsoft.com/en- us/library/aa378184&#40;VS.85&#41;.aspx &#42;/ /&#42; dwLogonProvider &#40;4th parameter&#41; : I used LOGON32&#95;PROVIDER&#95;DEFAUL, This provider uses the standard logon provider for the system. The default security provider is negotiate, unless you pass NULL for the domain name and the user name is not in UPN format. In this case, the default provider is NTLM. For more details about this parameter please see http://msdn.microsoft.com/en-us/library/aa378184&#40;VS.85&#41;.aspx &#42;/ /&#42; phToken &#40;5th parameter&#41;: A pointer to a handle variable that receives a handle to a token that represents the specified user. We can use this handler for impersonation purpose. &#42;/ bSuccessfulLogin = LogonUser&#40;strName, &#95;userDomain, strPassword, &#95;logonType, 0, ref token&#41;; return bSuccessfulLogin; } &#91;/code&#93;
+</code></pre><p>The next thing is to reference the MembershipProvider in Web.config:</p><pre><code>&#91;code lang=&quot;xml&quot;&#93;       &#91;/code&#93;
+</code></pre><p>Here's the complete source code for WinNTMembershipProvider: Please note that most of the boilerplate here is not needed for our example, it's just needed to fullfill the MembershipProvider contract.</p><pre><code>&#91;code lang=&quot;csharp&quot;&#93; using System; using System.Collections.Generic; using System.Text; using System.Web; using System.Web.Security; using System.Runtime.InteropServices; namespace my&#95;package { public class WinNTMembershipProvider : MembershipProvider { &#91;DllImport&#40;&quot;ADVAPI32.dll&quot;, EntryPoint = &quot;LogonUserW&quot;, SetLastError = true, CharSet = CharSet.Auto&#41;&#93; public static extern bool LogonUser&#40;string lpszUsername, string lpszDomain, string lpszPassword, int dwLogonType, int dwLogonProvider, ref IntPtr phToken&#41;; private String &#95;strName; private String &#95;strApplicationName; private String &#95;userDomain; private int &#95;logonType; private Boolean &#95;boolEnablePasswordReset; private Boolean &#95;boolEnablePasswordRetrieval; private int &#95;intMaxInvalidPasswordAttempts; private int &#95;intMinRequiredAlphanumericCharacters; private int &#95;intMinRequiredPasswordLength; private MembershipPasswordFormat &#95;oPasswordFormat; private string &#95;strPasswordStrengthRegularExpression; private Boolean &#95;boolRequiresQuestionAndAnswer; private Boolean &#95;boolRequiresUniqueEMail; public WinNTMembershipProvider&#40;&#41; { &#95;strName = &quot;WinNTMembershipProvider&quot;; &#95;strApplicationName = &quot;DefaultApp&quot;; &#95;userDomain = &quot;&quot;; &#95;logonType = 2; // Interactive by default &#95;boolEnablePasswordReset = false; &#95;boolEnablePasswordRetrieval = false; &#95;boolRequiresQuestionAndAnswer = false; &#95;boolRequiresUniqueEMail = false; &#95;intMaxInvalidPasswordAttempts = 3; &#95;intMinRequiredAlphanumericCharacters = 1; &#95;intMinRequiredPasswordLength = 5; &#95;strPasswordStrengthRegularExpression = @&quot;&#91;\w| !§$%&amp;/&#40;&#41;=\-?\&#42;&#93;&#42;&quot;; &#95;oPasswordFormat = MembershipPasswordFormat.Clear; } //DFB: reads entries from web.config and initializes this class from those values // Once the provider is loaded, the // runtime calls Initialize and passes the settings as name-value // pairs in an instance of the NameValueCollection class. // public override void Initialize&#40;string name, System.Collections.Specialized.NameValueCollection config&#41; { if &#40;config == null&#41; { throw new ArgumentNullException&#40;&quot;config&quot;&#41;; } if &#40;string.IsNullOrEmpty&#40;name&#41;&#41; { name = &quot;WinNTMembershipProvider&quot;; } if &#40;string.IsNullOrEmpty&#40;config&#91;&quot;description&quot;&#93;&#41;&#41; { config.Remove&#40;&quot;description&quot;&#41;; config.Add&#40;&quot;description&quot;, &quot;WinNT Membership Provider&quot;&#41;; } base.Initialize&#40;name, config&#41;; foreach &#40;string key in config.Keys&#41; { switch &#40;key.ToLower&#40;&#41;&#41; { case &quot;name&quot;: &#95;strName = config&#91;key&#93;; break; case &quot;applicationname&quot;: &#95;strApplicationName = config&#91;key&#93;; break; case &quot;userdomain&quot;: &#95;userDomain = config&#91;key&#93;; break; case &quot;logontype&quot;: &#95;logonType = int.Parse&#40;config&#91;key&#93;&#41;; break; } } } public override bool ValidateUser&#40;string strName, string strPassword&#41; { bool bSuccessfulLogin = false; IntPtr token = IntPtr.Zero; //userName, domainName and Password parameters are very obvious. /&#42; dwLogonType &#40;3rd parameter&#41;: I used LOGON32&#95;LOGON&#95;INTERACTIVE, This logon type is intended for users who will be interactively using the computer, such as a user being logged on by a terminal server, remote shell, or similar process. This logon type has the additional expense of caching logon information for disconnected operations. For more details about this parameter please see http://msdn.microsoft.com/en- us/library/aa378184&#40;VS.85&#41;.aspx &#42;/ /&#42; dwLogonProvider &#40;4th parameter&#41; : I used LOGON32&#95;PROVIDER&#95;DEFAUL, This provider uses the standard logon provider for the system. The default security provider is negotiate, unless you pass NULL for the domain name and the user name is not in UPN format. In this case, the default provider is NTLM. For more details about this parameter please see http://msdn.microsoft.com/en-us/library/aa378184&#40;VS.85&#41;.aspx &#42;/ /&#42; phToken &#40;5th parameter&#41;: A pointer to a handle variable that receives a handle to a token that represents the specified user. We can use this handler for impersonation purpose. &#42;/ bSuccessfulLogin = LogonUser&#40;strName, &#95;userDomain, strPassword, &#95;logonType, 0, ref token&#41;; return bSuccessfulLogin; } /&#42;&#42; &#42; Properties &#42;/ public override string ApplicationName { get { return &#95;strApplicationName; } set { &#95;strApplicationName = value; } } public override string Name { get { return &#95;strName; } } public override bool EnablePasswordReset { get { return &#95;boolEnablePasswordReset; } } public override bool EnablePasswordRetrieval { get { return &#95;boolEnablePasswordRetrieval; } } public override int MaxInvalidPasswordAttempts { get { return &#95;intMaxInvalidPasswordAttempts; } } public override int MinRequiredNonAlphanumericCharacters { get { return &#95;intMinRequiredAlphanumericCharacters; } } public override int MinRequiredPasswordLength { get { return &#95;intMinRequiredPasswordLength; } } public override int PasswordAttemptWindow { get { throw new NotImplementedException&#40;&#41;; } } public override MembershipPasswordFormat PasswordFormat { get { return &#95;oPasswordFormat; } } public override string PasswordStrengthRegularExpression { get { return &#95;strPasswordStrengthRegularExpression; } } public override bool RequiresQuestionAndAnswer { get { return &#95;boolRequiresQuestionAndAnswer; } } public override bool RequiresUniqueEmail { get { return &#95;boolRequiresUniqueEMail; } } /&#42; &#42; API Functions &#42;/ public override string GetPassword&#40;string strName, string strAnswer&#41; { throw new NotImplementedException&#40;&#41;; } public override MembershipUser CreateUser&#40;string username, string password, string email, string passwordQuestion, string passwordAnswer, bool isApproved, object userId, out MembershipCreateStatus status&#41; { throw new NotImplementedException&#40;&#41;; } public override string GetUserNameByEmail&#40;string strEmail&#41; { throw new NotImplementedException&#40;&#41;; } public override string ResetPassword&#40;string strName, string strAnswer&#41; { throw new NotImplementedException&#40;&#41;; } public override bool ChangePassword&#40;string strName, string strOldPwd, string strNewPwd&#41; { throw new NotImplementedException&#40;&#41;; } public override int GetNumberOfUsersOnline&#40;&#41; { throw new NotImplementedException&#40;&#41;; } public override bool ChangePasswordQuestionAndAnswer&#40;string strName, string strPassword, string strNewPwdQuestion, string strNewPwdAnswer&#41; { throw new NotImplementedException&#40;&#41;; } public override MembershipUser GetUser&#40;string strName, bool boolUserIsOnline&#41; { throw new NotImplementedException&#40;&#41;; } public override bool DeleteUser&#40;string strName, bool boolDeleteAllRelatedData&#41; { throw new NotImplementedException&#40;&#41;; } public override MembershipUserCollection FindUsersByEmail&#40;string strEmailToMatch, int iPageIndex, int iPageSize, out int iTotalRecords&#41; { throw new NotImplementedException&#40;&#41;; } public override MembershipUserCollection FindUsersByName&#40;string strUsernameToMatch, int iPageIndex, int iPageSize, out int iTotalRecords&#41; { throw new NotImplementedException&#40;&#41;; } public override MembershipUserCollection GetAllUsers&#40;int iPageIndex, int iPageSize, out int iTotalRecords&#41; { throw new NotImplementedException&#40;&#41;; } public override void UpdateUser&#40;MembershipUser user&#41; { throw new NotImplementedException&#40;&#41;; } public override bool UnlockUser&#40;string strUserName&#41; { throw new NotImplementedException&#40;&#41;; } public override MembershipUser GetUser&#40;object providerUserKey, bool userIsOnline&#41; { throw new NotImplementedException&#40;&#41;; } } } &#91;/code&#93;
+</code></pre><p>And the Web.config:</p><pre><code>&#91;code lang=&quot;xml&quot;&#93;                                                          &#91;/code&#93;
+</code></pre>
+</div>
+
+<div id="post-tags">
+    <b>Tags: </b>
+    
+    <a href="/tags/uncategorized.html">uncategorized</a>
+    
+    <a href="/tags/it.html">it</a>
+    
+    <a href="/tags/programming.html">programming</a>
+    
+    <a href="/tags/c.html">c</a>
+    
+</div>
+
+
+    <div id="prev-next" class="hidden-print">
+        
+        <a href="/posts/2010-07-04-synchronize-your-media-library-with-itunes.html">&laquo; Synchronize your media library with iTunes</a>
+        
+        
+        <a class="right pull-right" href="/posts/2010-02-21-simidude-150-release-notes.html">Simidude 1.5.0 Release Notes &raquo;</a>
+        
+    </div>
+
+    
+    <div id="disqus_thread" style="margin-top:20px;" class="hidden-print"></div>
+    <script type="text/javascript">
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//agynamix.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+
+
+</div>
+
+  </div>
+
+</div>
+<div class="col-sm-3 hidden-xs" id="sidebar">
+
+  <img src="/img/bio-photo.jpg" class="img-responsive img-circle" alt="Mug Shot" style="max-width:120px;">
+  <ul class="post-list">
+    <li>
+      <span class="entry-bio">
+        Torsten Uhlmann<br>
+        AGYNAMIX Founder, Software Developer, Husband, Father, Believer, Geek.
+      </span>
+    </li>
+  </ul>
+
+  <h2 class="post-title">Publications</h2>
+  <ul class="post-list">
+    <li>
+      <article>
+        Torsten Uhlmann spoke at <a href="https://skillsmatter.com/skillscasts/4570-lift-3-high-and-lifted-up" target="_blank">Scala Exchange</a> and <a href="https://www.parleys.com/play/51c1a652e4b0ed877035681f/chapter0/about" target="_blank">ScalaDays</a> conferences.
+        He is the author of the Lift Web Applications HowTo.
+      </article>
+    </li>
+    <li>
+      <article>
+        <a href="https://www.packtpub.com/web-development/instant-lift-web-applications-how-instant" target="_blank">
+          <img style="max-height:250px" src="/img/portfolio/LiftWebAppsHowTo.png">
+        </a>
+      </article>
+    </li>
+    <li>
+      <article>
+        <a href="http://www.liftweb.net" target="_blank"><img style="max-height:30px" src="/img/portfolio/Liftweb.png"></a><br>
+          He is committer of the <a href="http://www.liftweb.net" target="_blank">Liftweb Framework</a>.
+      </article>
+    </li>
+  </ul>
+
+
+  <h2 class="post-title">Links</h2>
+  <ul id="links" class="post-list">
+    
+    <li><a href="/pages/terms.html" class="no-underline">Terms</a></li>
+    
+    <li><a href="/pages/imprint.html" class="no-underline">Imprint / Impressum</a></li>
+    
+  </ul>
+  
+  <div id="recent">
+    <h2 class="post-title">Recent Posts</h2>
+    <ul class="post-list">
+      
+      <li><a href="/posts/2015-09-22-doo-and-figwheel.html" class="no-underline">ClojureScript Testing with Doo and Figwheel</a></li>
+      
+      <li><a href="/posts/2015-09-21-tunneling-ssh-connections.html" class="no-underline">Tunneling SSH Connections</a></li>
+      
+      <li><a href="/posts/2015-07-31-a-new-blog.html" class="no-underline">A New Time, a New Blog</a></li>
+      
+    </ul>
+  </div>
+  
+  <!--
+  
+  <div id="tags">
+    <h2 class="post-title">Tags</h2>
+    <ul class="post-list">
+      
+      <li><a href="/tags/mac.html" class="no-underline">mac</a></li>
+      
+      <li><a href="/tags/wordpress.html" class="no-underline">wordpress</a></li>
+      
+      <li><a href="/tags/marketing.html" class="no-underline">marketing</a></li>
+      
+      <li><a href="/tags/simidude.html" class="no-underline">simidude</a></li>
+      
+      <li><a href="/tags/sale.html" class="no-underline">sale</a></li>
+      
+      <li><a href="/tags/cryogen.html" class="no-underline">cryogen</a></li>
+      
+      <li><a href="/tags/media.html" class="no-underline">media</a></li>
+      
+      <li><a href="/tags/newsletter.html" class="no-underline">newsletter</a></li>
+      
+      <li><a href="/tags/news.html" class="no-underline">news</a></li>
+      
+      <li><a href="/tags/uncategorized.html" class="no-underline">uncategorized</a></li>
+      
+      <li><a href="/tags/it.html" class="no-underline">it</a></li>
+      
+      <li><a href="/tags/release-notes.html" class="no-underline">release-notes</a></li>
+      
+      <li><a href="/tags/java.html" class="no-underline">java</a></li>
+      
+      <li><a href="/tags/wiki.html" class="no-underline">wiki</a></li>
+      
+      <li><a href="/tags/twitter.html" class="no-underline">twitter</a></li>
+      
+      <li><a href="/tags/bug-tracking.html" class="no-underline">bug-tracking</a></li>
+      
+      <li><a href="/tags/business.html" class="no-underline">business</a></li>
+      
+      <li><a href="/tags/docbook.html" class="no-underline">docbook</a></li>
+      
+      <li><a href="/tags/photography.html" class="no-underline">photography</a></li>
+      
+      <li><a href="/tags/dopus.html" class="no-underline">dopus</a></li>
+      
+      <li><a href="/tags/programming.html" class="no-underline">programming</a></li>
+      
+      <li><a href="/tags/subversion.html" class="no-underline">subversion</a></li>
+      
+      <li><a href="/tags/gps.html" class="no-underline">gps</a></li>
+      
+      <li><a href="/tags/fritzbox-snom-phone.html" class="no-underline">fritzbox-snom-phone</a></li>
+      
+      <li><a href="/tags/dobudish.html" class="no-underline">dobudish</a></li>
+      
+      <li><a href="/tags/itunes.html" class="no-underline">itunes</a></li>
+      
+      <li><a href="/tags/english.html" class="no-underline">english</a></li>
+      
+      <li><a href="/tags/c.html" class="no-underline">c</a></li>
+      
+      <li><a href="/tags/telefonie.html" class="no-underline">telefonie</a></li>
+      
+    </ul>
+  </div>
+  
+-->
+
+</div>
+
+
+
+      </div>
+    </div>
+  </article>
+
+  <hr>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+          <ul class="list-inline text-center hidden-print">
+            <li>
+              <a href="http://linkedin.com/in/torstenuhlmann" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fa fa-circle fa-stack-2x"></i>
+                  <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="http://www.xing.com/profile/Torsten_Uhlmann2" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fa fa-circle fa-stack-2x"></i>
+                  <i class="fa fa-xing fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="http://twitter.com/agynamix" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fa fa-circle fa-stack-2x"></i>
+                  <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="http://facebook.com/agynamix" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fa fa-circle fa-stack-2x"></i>
+                  <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="http://plus.google.com/+TorstenUhlmannCrafts" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fa fa-circle fa-stack-2x"></i>
+                  <i class="fa fa-google-plus fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="http://github.com/tuhlmann" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fa fa-circle fa-stack-2x"></i>
+                  <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="http://bitbucket.org/agynamix" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fa fa-circle fa-stack-2x"></i>
+                  <i class="fa fa-bitbucket fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="http://stackoverflow.com/users/7143/torsten-uhlmann" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fa fa-circle fa-stack-2x"></i>
+                  <i class="fa fa-stack-overflow fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+          </ul>
+
+          <p class="copyright text-muted">Copyright &copy; 2015 <a href="mailto:tuhlmann@agynamix.de">Torsten Uhlmann</a>.&nbsp;
+          Made with <i class="fa fa-heart"></i> in Thalheim.&nbsp;
+          Powered by <a href="http://cryogenweb.org">Cryogen.</a></p>
+
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <!--<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>-->
+
+  <!-- Bootstrap Core JavaScript -->
+  <script src="../js/bootstrap.min.js" type="text/javascript"></script>
+
+  <!-- Custom Theme JavaScript -->
+  <script src="../js/clean-blog.js" type="text/javascript"></script>
+
+  <script src="https://squaresend.com/squaresend.js"></script>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <script>
+    sqs_title = "Drop Us a Line!";
+    sqs_subject = "Just wanted to say Hi!"
+    sqs_label_submit = "Send";
+  </script>
+
+  <script>
+    $(document).ready(function() {
+      $("#sidebar-toggle").click(function() {
+        if ($("#sidebar").is(":visible")) {
+          $("#sidebar").fadeOut("fast", function() {
+            $("#main-content").removeClass("col-sm-9").addClass("col-sm-8 col-sm-offset-2");
+            $("#sidebar-toggle").addClass("out");
+          });
+        } else {
+          $("#main-content").removeClass("col-sm-8 col-sm-offset-2").addClass("col-sm-9");
+          $("#sidebar-toggle").removeClass("out");
+          $("#sidebar").fadeIn("fast");
+        }
+      });
+    });
+  </script>
+
+
+</body>
+</html>

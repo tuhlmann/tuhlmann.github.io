@@ -12,18 +12,21 @@
   <title>AGYNAMIX: Use your Novatel Ovation MC950D with Linux</title>
 
   <!-- Bootstrap Core CSS -->
-  <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
   <!-- Custom CSS -->
-  <link href="../css/clean-blog.css" rel="stylesheet" type="text/css" />
+  <link href="/css/clean-blog.css" rel="stylesheet" type="text/css" />
 
   <!-- Custom Fonts -->
   <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+  <!-- <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'> -->
+  <link href='https://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700italic,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Noto+Sans:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+  <!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'> -->
   <!--<link href='http://fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700' rel='stylesheet'
         type='text/css'>-->
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/styles/default.min.css">
+
 
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
@@ -105,14 +108,14 @@
 <div id="post">
     <div class="post-header">
     <div id="post-meta" class="row">
-        <div class="col-lg-6">January 3, 2009</div>
+        <div class="col-lg-6">3. Januar 2009</div>
         
     </div>
     <h2>Use your Novatel Ovation MC950D with Linux</h2>
 </div>
 <div>
     
-    <p>A while back I bought myself a Vodafone <a href='http://www.moobicent.de/'>UMTS flat rate</a> together with one of thise nifty UMTS USB sticks. Mine is a Novatel Ovation MC950D.</p><p><img src="/img/uploads/2009/01/thalheim&#95;im&#95;winter.jpg" alt="" /></p><p>For Windows, there isn't much to bother. The stick comes with the Mobile Connect Lite software installed in the memory part. These kinds of USB devices act as a memory stick when not activated otherwise or as an UMTS modem. So the first time you connect the stick it will connect as a memory stick and show you a directory with the setup files for the Mobile Connect drivers. Install them and the next time (you might need to reboot) you connect the stick it will reconnect as an UMTS modem.</p><p>That's the way it works on Windows XP. On my Vista machine, it doesn't automatically reconnect. I have to start the "LiteAuto.exe" application fom the stick manually. After that it works as expected.</p><p>Now for my travels I have bought this little beautiful MSI Wind Netbook. It comes preinstalled with Windows XP. Being me I created a dual boot setup with Windows XP in one partition and Ubuntu 8.10 in the other. BTW, <a href='http://wiki.msiwind.net/index.php/Ubuntu&#95;8.04&#95;Tweaks'>this site</a> describes some tweaks you should engage in in order to get your MSI Window running fully under Ubuntu. I for instance exchanged the installed WLan card or an " <a href='http://support.intel.com/support/wireless/wlan/pro3945abg/ "http://support.intel.com/support/wireless/wlan/pro3945abg/"'>Intel PRO/Wireless 3945ABG</a>" in order to make use of WiFi.</p><p>Now I also wanted to use my UMTS modem when working with Ubuntu. The first (semi successful) attempt I made was by following the description in <a href='http://quilombo.wordpress.com/2008/01/21/modem-usb-35g-novatel-ovation-mc950d-in-ubuntulinux/'>this blog post</a>.</p><p>It worked, but I found it dreadfull to call some command line script in order to reconnect the stick as a modem. So I set it up as an exercise but didn't really use it much.</p><p>Now these last days a ran across a site caled <a href='http://www.betavine.net/bvportal/web/linux&#95;drivers'>Betavine</a>, a Vodafone research and community site where they publish, among others, UMTS card drivers for Linux.</p><p>I downloaded the "<a href='https://forge.betavine.net/frs/download.php/269/vodafone-mobile-connect-card-driver-for-linux-2.0.beta3-ALL-i386-installer.run'>Autoinstall for Ubuntu Fedore SuSE</a>" file, installed it:</p><pre><code>sudo .vodafone-mobile-connect-card-driver-for-linux-2.0.beta3-ALL-i386-installer.run
+    <p>A while back I bought myself a Vodafone <a href='http://www.moobicent.de/'>UMTS flat rate</a> together with one of thise nifty UMTS USB sticks. Mine is a Novatel Ovation MC950D.</p><p><img src="/img/uploads/2009/01/thalheim_im_winter.jpg" alt="" /></p><p>For Windows, there isn't much to bother. The stick comes with the Mobile Connect Lite software installed in the memory part. These kinds of USB devices act as a memory stick when not activated otherwise or as an UMTS modem. So the first time you connect the stick it will connect as a memory stick and show you a directory with the setup files for the Mobile Connect drivers. Install them and the next time (you might need to reboot) you connect the stick it will reconnect as an UMTS modem.</p><p>That's the way it works on Windows XP. On my Vista machine, it doesn't automatically reconnect. I have to start the "LiteAuto.exe" application fom the stick manually. After that it works as expected.</p><p>Now for my travels I have bought this little beautiful MSI Wind Netbook. It comes preinstalled with Windows XP. Being me I created a dual boot setup with Windows XP in one partition and Ubuntu 8.10 in the other. BTW, <a href='http://wiki.msiwind.net/index.php/Ubuntu_8.04_Tweaks'>this site</a> describes some tweaks you should engage in in order to get your MSI Window running fully under Ubuntu. I for instance exchanged the installed WLan card or an " <a href='http://support.intel.com/support/wireless/wlan/pro3945abg/ "http://support.intel.com/support/wireless/wlan/pro3945abg/"'>Intel PRO/Wireless 3945ABG</a>" in order to make use of WiFi.</p><p>Now I also wanted to use my UMTS modem when working with Ubuntu. The first (semi successful) attempt I made was by following the description in <a href='http://quilombo.wordpress.com/2008/01/21/modem-usb-35g-novatel-ovation-mc950d-in-ubuntulinux/'>this blog post</a>.</p><p>It worked, but I found it dreadfull to call some command line script in order to reconnect the stick as a modem. So I set it up as an exercise but didn't really use it much.</p><p>Now these last days a ran across a site caled <a href='http://www.betavine.net/bvportal/web/linux_drivers'>Betavine</a>, a Vodafone research and community site where they publish, among others, UMTS card drivers for Linux.</p><p>I downloaded the "<a href='https://forge.betavine.net/frs/download.php/269/vodafone-mobile-connect-card-driver-for-linux-2.0.beta3-ALL-i386-installer.run'>Autoinstall for Ubuntu Fedore SuSE</a>" file, installed it:</p><pre><code>sudo .vodafone-mobile-connect-card-driver-for-linux-2.0.beta3-ALL-i386-installer.run
 </code></pre><p>and, after a reboot of my machine it just worked!</p><p>I inserted the Novatel stick and, after the stick had powered up, it would show a new entry in Ubuntu's Network Manager (you access it from the little icon in the upper panel). When you click on the network Manager icon you see a new Network "Vodafone D2" (or whatever network you are in), you can click on it and it will connect. Mighty cool.</p><p>Now I just need to get that stick working with my Mac...<h2></h2></p><p>My name is Torsten Uhlmann, I'm founder of <a href='http://www.agynamix.de'>AGYNAMIX</a>, a tiny (sooo tiiiny its just me) software company specializing in Java software consulting for larger corporations.</p><p>I also develop <a href='http://www.simidude.com'>Simidude</a>, a cross platform network clipboard and Drag&Drop tool which you might happen to find usefull.</p>
 </div>
 
@@ -135,15 +138,6 @@
         
     </div>
 
-    
-    <div id="disqus_thread" style="margin-top:20px;" class="hidden-print"></div>
-    <script type="text/javascript">
-        (function() {
-            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-            dsq.src = '//agynamix.disqus.com/embed.js';
-            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-        })();
-    </script>
     
 
 
@@ -201,11 +195,11 @@
     <h2 class="post-title">Recent Posts</h2>
     <ul class="post-list">
       
+      <li><a href="/posts/2015-10-31-compiler-fails-with-linux-dir-encrypt.html" class="no-underline">Scala compiler fails with Linux directory encryption</a></li>
+      
+      <li><a href="/posts/2015-10-05-converting-old-wordpress-posts.html" class="no-underline">Converting my old Wordpress posts to Markdown</a></li>
+      
       <li><a href="/posts/2015-09-22-doo-and-figwheel.html" class="no-underline">ClojureScript Testing with Doo and Figwheel</a></li>
-      
-      <li><a href="/posts/2015-09-21-tunneling-ssh-connections.html" class="no-underline">Tunneling SSH Connections</a></li>
-      
-      <li><a href="/posts/2015-07-31-a-new-blog.html" class="no-underline">A New Time, a New Blog</a></li>
       
     </ul>
   </div>
@@ -248,6 +242,8 @@
       
       <li><a href="/tags/bug-tracking.html" class="no-underline">bug-tracking</a></li>
       
+      <li><a href="/tags/Scala.html" class="no-underline">Scala</a></li>
+      
       <li><a href="/tags/business.html" class="no-underline">business</a></li>
       
       <li><a href="/tags/docbook.html" class="no-underline">docbook</a></li>
@@ -260,11 +256,17 @@
       
       <li><a href="/tags/subversion.html" class="no-underline">subversion</a></li>
       
+      <li><a href="/tags/Linux.html" class="no-underline">Linux</a></li>
+      
+      <li><a href="/tags/Clojure.html" class="no-underline">Clojure</a></li>
+      
       <li><a href="/tags/gps.html" class="no-underline">gps</a></li>
       
       <li><a href="/tags/fritzbox-snom-phone.html" class="no-underline">fritzbox-snom-phone</a></li>
       
       <li><a href="/tags/dobudish.html" class="no-underline">dobudish</a></li>
+      
+      <li><a href="/tags/Ubuntu.html" class="no-underline">Ubuntu</a></li>
       
       <li><a href="/tags/itunes.html" class="no-underline">itunes</a></li>
       
@@ -374,15 +376,19 @@
   <!--<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>-->
 
   <!-- Bootstrap Core JavaScript -->
-  <script src="../js/bootstrap.min.js" type="text/javascript"></script>
+  <script src="/js/bootstrap.min.js" type="text/javascript"></script>
 
   <!-- Custom Theme JavaScript -->
-  <script src="../js/clean-blog.js" type="text/javascript"></script>
+  <script src="/js/clean-blog.js" type="text/javascript"></script>
 
   <script src="https://squaresend.com/squaresend.js"></script>
 
-  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
+  <script src="/js/highlight.pack.js" type="text/javascript"></script>
+  <!-- <script>hljs.initHighlightingOnLoad();</script> -->
+
+  <script type="text/javascript">
+    hljs.initHighlightingOnLoad();
+  </script>
 
   <script>
     sqs_title = "Drop Us a Line!";

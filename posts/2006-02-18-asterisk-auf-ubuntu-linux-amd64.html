@@ -12,18 +12,21 @@
   <title>AGYNAMIX: Asterisk auf Ubuntu Linux (AMD64)</title>
 
   <!-- Bootstrap Core CSS -->
-  <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
   <!-- Custom CSS -->
-  <link href="../css/clean-blog.css" rel="stylesheet" type="text/css" />
+  <link href="/css/clean-blog.css" rel="stylesheet" type="text/css" />
 
   <!-- Custom Fonts -->
   <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+  <!-- <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'> -->
+  <link href='https://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700italic,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Noto+Sans:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+  <!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'> -->
   <!--<link href='http://fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700' rel='stylesheet'
         type='text/css'>-->
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/styles/default.min.css">
+
 
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
@@ -105,14 +108,14 @@
 <div id="post">
     <div class="post-header">
     <div id="post-meta" class="row">
-        <div class="col-lg-6">February 18, 2006</div>
+        <div class="col-lg-6">18. Februar 2006</div>
         
     </div>
     <h2>Asterisk auf Ubuntu Linux (AMD64)</h2>
 </div>
 <div>
     
-    <p>Da denkt man nun, man hat einen tollen Prozessor. Ha, Pustekuchen! Wenn man sich außerhalb der i386 Gewässer bewegt, darf man an manchen Stellen zum eigenen Schraubenzieher greifen. Aber jetzt läuft es- <a href='http://blog.agynamix.de/wp-admin/www.asterisk.org'>Asterisk</a> (1.2.1) zusammen mit <a href='http://coalescentsystems.ca/index.php?option=com&#95;content&task=view&id=31&Itemid=57 "Asterisk Management Portal"'>AMP</a> auf unserem Ubuntu-Server. Ich bin dabei, für den ganzen Kram eine Installanleitung zu verfassen, hier schonmal ein paar Tipps im Voraus: Für die Installation habe ich mir den Bristuff-Patch von <a href='http://83.137.99.169/&#126;junghanns.net/downloads/bristuff-0.3.0-PRE-1f.tar.gz'>www.junghanns.net</a> heruntergeladen (Version mit dem f hintendran), dazu dann noch den passenden <a href='http://zaphfc.florz.dyndns.org/'>Florz-Patch</a>:</p><p>ins bristuff-Paket wechseln, ./download.sh tipseln und warten</p><p>danach Florz-Patch einspielen: <code>zcat /path/to/zaphfc&#95;0.3.0-PRE-1f&#95;florz-11.diff.gz | patch -p1</code></p><p>dann in den Verzeichnissen zaphfc und zaptel die Makefiles anpassen: dem Schalter <strong>KFLAGS</strong> wird noch folgendes hinzugefügt: -mcmodel=kernel. Wenn man das nicht macht, lässt sich das Ganze zwar übersetzen, aber die Kernel-Module können nicht geladen werden. Dumm das. Das bringt uns zum nächsten: die Kernelquellen müssen installiert und konfiguriert sein:</p><ul><li>aus dem Verzeichnis /boot die entspr. config-Datei ins Kernel-Source Verzeichnis kopieren (nach .config), dann mal make menuconfig ausführen, exit auswählen und Konfiguration speichern. Danach: make prepare-all. Die Quellen werden gesucht unter /usr/src/linux bzw. /usr/src/linux-2.6. Man sollte beide symbolische Links anlegen.</li></ul><p>Mit diesen Schritten sollte sich Asterisk übersetzen lassen. Aus dem bristuff-Verzeichnis ./compile.sh aufrufen.</p><p>Nach der Installation des AMP-Moduls musste ich noch folgende Änderungen durchführen:</p><ul><li>der User, der Asterisk ausführt, ist bei mir www-data:www-data. Es gibt Probleme, wenn ein Teil als asterisk-User läuft und der Web-Teil als www-data, daher diese Anpassung. Das muss im Script /usr/sbin/amportal geändert werden.</li><li>in /var/www/recordings/modules/settings.module: Das ARI Modul erwartet vom Asterisk Call Manager die Rückmeldung: "Asterisk Call Manager 1.0", das "1.0" muss durch "1.2" ersetzt werden. 2 Positionen sind hier zu ändern.</li><li>in /var/lib/asterisk/agi-bin/dialparties.agi gibt es 2x die Zeile "$tn-&gt;waitfor('/0&#92;n$/');", die muss geändert werden nach: "$tn-&gt;waitfor('/2&#92;n$/');", sonst wartet das Teil ewig mit dieser Meldung im Log: "dialparties.agi: Checking CW and CFB status for extension xxx". Hu, ich kann die Haare gar nicht zählen, die mich das gekostet hat!</li></ul><p>Nuja, mit ein bißchen Glück sollte das Ganze jetzt funktionieren.</p>
+    <p>Da denkt man nun, man hat einen tollen Prozessor. Ha, Pustekuchen! Wenn man sich außerhalb der i386 Gewässer bewegt, darf man an manchen Stellen zum eigenen Schraubenzieher greifen. Aber jetzt läuft es- <a href='http://blog.agynamix.de/wp-admin/www.asterisk.org'>Asterisk</a> (1.2.1) zusammen mit <a href='http://coalescentsystems.ca/index.php?option=com_content&task=view&id=31&Itemid=57 "Asterisk Management Portal"'>AMP</a> auf unserem Ubuntu-Server. Ich bin dabei, für den ganzen Kram eine Installanleitung zu verfassen, hier schonmal ein paar Tipps im Voraus: Für die Installation habe ich mir den Bristuff-Patch von <a href='http://83.137.99.169/~junghanns.net/downloads/bristuff-0.3.0-PRE-1f.tar.gz'>www.junghanns.net</a> heruntergeladen (Version mit dem f hintendran), dazu dann noch den passenden <a href='http://zaphfc.florz.dyndns.org/'>Florz-Patch</a>:</p><p>ins bristuff-Paket wechseln, ./download.sh tipseln und warten</p><p>danach Florz-Patch einspielen: <code>zcat /path/to/zaphfc&#95;0.3.0-PRE-1f&#95;florz-11.diff.gz | patch -p1</code></p><p>dann in den Verzeichnissen zaphfc und zaptel die Makefiles anpassen: dem Schalter <strong>KFLAGS</strong> wird noch folgendes hinzugefügt: -mcmodel=kernel. Wenn man das nicht macht, lässt sich das Ganze zwar übersetzen, aber die Kernel-Module können nicht geladen werden. Dumm das. Das bringt uns zum nächsten: die Kernelquellen müssen installiert und konfiguriert sein:</p><ul><li>aus dem Verzeichnis /boot die entspr. config-Datei ins Kernel-Source Verzeichnis kopieren (nach .config), dann mal make menuconfig ausführen, exit auswählen und Konfiguration speichern. Danach: make prepare-all. Die Quellen werden gesucht unter /usr/src/linux bzw. /usr/src/linux-2.6. Man sollte beide symbolische Links anlegen.</li></ul><p>Mit diesen Schritten sollte sich Asterisk übersetzen lassen. Aus dem bristuff-Verzeichnis ./compile.sh aufrufen.</p><p>Nach der Installation des AMP-Moduls musste ich noch folgende Änderungen durchführen:</p><ul><li>der User, der Asterisk ausführt, ist bei mir www-data:www-data. Es gibt Probleme, wenn ein Teil als asterisk-User läuft und der Web-Teil als www-data, daher diese Anpassung. Das muss im Script /usr/sbin/amportal geändert werden.</li><li>in /var/www/recordings/modules/settings.module: Das ARI Modul erwartet vom Asterisk Call Manager die Rückmeldung: "Asterisk Call Manager 1.0", das "1.0" muss durch "1.2" ersetzt werden. 2 Positionen sind hier zu ändern.</li><li>in /var/lib/asterisk/agi-bin/dialparties.agi gibt es 2x die Zeile "$tn-&gt;waitfor('/0&#92;n$/');", die muss geändert werden nach: "$tn-&gt;waitfor('/2&#92;n$/');", sonst wartet das Teil ewig mit dieser Meldung im Log: "dialparties.agi: Checking CW and CFB status for extension xxx". Hu, ich kann die Haare gar nicht zählen, die mich das gekostet hat!</li></ul><p>Nuja, mit ein bißchen Glück sollte das Ganze jetzt funktionieren.</p>
 </div>
 
 <div id="post-tags">
@@ -134,15 +137,6 @@
         
     </div>
 
-    
-    <div id="disqus_thread" style="margin-top:20px;" class="hidden-print"></div>
-    <script type="text/javascript">
-        (function() {
-            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-            dsq.src = '//agynamix.disqus.com/embed.js';
-            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-        })();
-    </script>
     
 
 
@@ -200,11 +194,11 @@
     <h2 class="post-title">Recent Posts</h2>
     <ul class="post-list">
       
+      <li><a href="/posts/2015-10-31-compiler-fails-with-linux-dir-encrypt.html" class="no-underline">Scala compiler fails with Linux directory encryption</a></li>
+      
+      <li><a href="/posts/2015-10-05-converting-old-wordpress-posts.html" class="no-underline">Converting my old Wordpress posts to Markdown</a></li>
+      
       <li><a href="/posts/2015-09-22-doo-and-figwheel.html" class="no-underline">ClojureScript Testing with Doo and Figwheel</a></li>
-      
-      <li><a href="/posts/2015-09-21-tunneling-ssh-connections.html" class="no-underline">Tunneling SSH Connections</a></li>
-      
-      <li><a href="/posts/2015-07-31-a-new-blog.html" class="no-underline">A New Time, a New Blog</a></li>
       
     </ul>
   </div>
@@ -247,6 +241,8 @@
       
       <li><a href="/tags/bug-tracking.html" class="no-underline">bug-tracking</a></li>
       
+      <li><a href="/tags/Scala.html" class="no-underline">Scala</a></li>
+      
       <li><a href="/tags/business.html" class="no-underline">business</a></li>
       
       <li><a href="/tags/docbook.html" class="no-underline">docbook</a></li>
@@ -259,11 +255,17 @@
       
       <li><a href="/tags/subversion.html" class="no-underline">subversion</a></li>
       
+      <li><a href="/tags/Linux.html" class="no-underline">Linux</a></li>
+      
+      <li><a href="/tags/Clojure.html" class="no-underline">Clojure</a></li>
+      
       <li><a href="/tags/gps.html" class="no-underline">gps</a></li>
       
       <li><a href="/tags/fritzbox-snom-phone.html" class="no-underline">fritzbox-snom-phone</a></li>
       
       <li><a href="/tags/dobudish.html" class="no-underline">dobudish</a></li>
+      
+      <li><a href="/tags/Ubuntu.html" class="no-underline">Ubuntu</a></li>
       
       <li><a href="/tags/itunes.html" class="no-underline">itunes</a></li>
       
@@ -373,15 +375,19 @@
   <!--<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>-->
 
   <!-- Bootstrap Core JavaScript -->
-  <script src="../js/bootstrap.min.js" type="text/javascript"></script>
+  <script src="/js/bootstrap.min.js" type="text/javascript"></script>
 
   <!-- Custom Theme JavaScript -->
-  <script src="../js/clean-blog.js" type="text/javascript"></script>
+  <script src="/js/clean-blog.js" type="text/javascript"></script>
 
   <script src="https://squaresend.com/squaresend.js"></script>
 
-  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
+  <script src="/js/highlight.pack.js" type="text/javascript"></script>
+  <!-- <script>hljs.initHighlightingOnLoad();</script> -->
+
+  <script type="text/javascript">
+    hljs.initHighlightingOnLoad();
+  </script>
 
   <script>
     sqs_title = "Drop Us a Line!";

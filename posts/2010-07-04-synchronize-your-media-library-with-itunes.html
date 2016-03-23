@@ -12,18 +12,21 @@
   <title>AGYNAMIX: Synchronize your media library with iTunes</title>
 
   <!-- Bootstrap Core CSS -->
-  <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
   <!-- Custom CSS -->
-  <link href="../css/clean-blog.css" rel="stylesheet" type="text/css" />
+  <link href="/css/clean-blog.css" rel="stylesheet" type="text/css" />
 
   <!-- Custom Fonts -->
   <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+  <!-- <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'> -->
+  <link href='https://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700italic,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Noto+Sans:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+  <!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'> -->
   <!--<link href='http://fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700' rel='stylesheet'
         type='text/css'>-->
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/styles/default.min.css">
+
 
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
@@ -105,14 +108,14 @@
 <div id="post">
     <div class="post-header">
     <div id="post-meta" class="row">
-        <div class="col-lg-6">July 4, 2010</div>
+        <div class="col-lg-6">4. Juli 2010</div>
         
     </div>
     <h2>Synchronize your media library with iTunes</h2>
 </div>
 <div>
     
-    <p>This article will show you how you can synchronize your media library (movies, tv shows and iTunes shows at the moment) with iTunes.</p><h3><a name="background:"></a>Background:</h3><p>To understand my solution I'd like to share with you how my media setup works: I use eyeTV (great program btw) to record movies and tv shows. I then use Toast to cut out commercials and convert the file into Apple TV format. I then copy the media files unto a NAS (Drobo in my case) into a predefined directory structure (see below). To watch shows through Apple TV I first have to import them into my Mac Mini (the same that records the shows). I then have the Mac Mini connected to the Apple TV and let it stream media into the living room. So for that purpose the Apple TV is just an overly expensive iTunes connector that just works...</p><h3><a name="how&#95;does&#95;it&#95;work:"></a>How does it work:</h3><p>In order to have an automated process (synchronize your current media library with the iTunes library) I have written a small piece of software that does just that. iTunesMediaImport is a Java based cross platform software that is freely available at <a href="http://code.google.com/p/itunesmediaimport/">http://code.google.com/p/itunesmediaimport/</a> When it runs it parses a defined directory structure, dissects the file and directory name and creates a proper iTunes entry. iTunesMediaImport is started from a command line terminal.</p><h3><a name="directory&#95;structure:"></a>Directory Structure:</h3><p>The important thing is that the media archive directory structure is what iTunesMediaImport expects. It knows 3 different kind of media types: iTunes shows, movies you recorded yourself and self recorded TV shows.</p><h4><a name="itunes&#95;shows:"></a>iTunes Shows:</h4><p>For iTunes shows you point the variable "itunesShowsPath.x" (x is a unique number) straight to the "TV shows" folder. The content of that folder should be the folders of your iTunes shows.</p><h4><a name="movies:"></a>Movies:</h4><p>For movies point "moviePath.x" to a folder that contains genre folders. Each genre folder contains the movie files that you file under that genre. So in my case I point the variable (from etc/mediaimport.properties) to: "/Volumes/Drobo/Mediathek/Movies". This folder contains genre folders like "Adventure", "Action", "Comedy". You can have as many and name them as you see fit. When the movie is imported into iTunes it will be filed under a genre category with that name. Then the genre folder contains your movie files. The file name of the movie will be used as it's name in iTunes.</p><h4><a name="tv&#95;shows:"></a>TV Shows:</h4><p>TV shows are handled much like movies except there is another directory layer, the season folder. In mediaimport.properties you find a key "tvSeriesPath.x" that points to a directory that forms the root of my tv shows archive, "/Volumes/Drobo/Mediathek/TV Series" in my case. Then this folder contains the names of my tv shows, like "Bones", "Stargate" or whatever your poison is. Now under that folder you need to define another folder named "S&lt;season number&gt;", so "Stargate/S3/" would be the 3rd season of Stargate. Under the season folder you file the tv shows that belong to that season, for instance: "Stargate 11 - Tokra.m4v". iTunesMediaImport will parse the file name backwards and stop at the first dash ('-') it finds. If it finds a number after the dash (looking towards the beginning of the filename) that number will become the show number in iTunes. The part after the dash until the end of the file name (except the .m4v extension) will become the name of the show. --- iTunesMediaImport will keep a log of media files it has added into iTunes in order to avoid processing them over and over again. It will also delete shows from iTunes that have been deleted or renamed in your archive. I invite you to give it a try, if you want you are welcome to contribute to it on Google Code. There's also a forum for it <a href='http://helpdesk.agynamix.de/index.php?pg=forums.topics&id=6'>here</a>. Have fun!</p><h4><a name="references:"></a>References:</h4><ul><li>iTunesMediaImport on Google Code: <a href="http://code.google.com/p/itunesmediaimport/">http://code.google.com/p/itunesmediaimport/</a></li><li>iTunesMediaImport forum: <a href="http://helpdesk.agynamix.de/index.php?pg=forums.topics&id=6">http://helpdesk.agynamix.de/index.php?pg=forums.topics&id=6</a></li><li>My website: <a href="http://www.agynamix.de">http://www.agynamix.de</a></li></ul>
+    <p>This article will show you how you can synchronize your media library (movies, tv shows and iTunes shows at the moment) with iTunes.</p><h3><a name="background:"></a>Background:</h3><p>To understand my solution I'd like to share with you how my media setup works: I use eyeTV (great program btw) to record movies and tv shows. I then use Toast to cut out commercials and convert the file into Apple TV format. I then copy the media files unto a NAS (Drobo in my case) into a predefined directory structure (see below). To watch shows through Apple TV I first have to import them into my Mac Mini (the same that records the shows). I then have the Mac Mini connected to the Apple TV and let it stream media into the living room. So for that purpose the Apple TV is just an overly expensive iTunes connector that just works...</p><h3><a name="how&#95;does&#95;it&#95;work:"></a>How does it work:</h3><p>In order to have an automated process (synchronize your current media library with the iTunes library) I have written a small piece of software that does just that. iTunesMediaImport is a Java based cross platform software that is freely available at <a href="http://code.google.com/p/itunesmediaimport/">http://code.google.com/p/itunesmediaimport/</a> When it runs it parses a defined directory structure, dissects the file and directory name and creates a proper iTunes entry. iTunesMediaImport is started from a command line terminal.</p><h3><a name="directory&#95;structure:"></a>Directory Structure:</h3><p>The important thing is that the media archive directory structure is what iTunesMediaImport expects. It knows 3 different kind of media types: iTunes shows, movies you recorded yourself and self recorded TV shows.</p><h4><a name="itunes&#95;shows:"></a>iTunes Shows:</h4><p>For iTunes shows you point the variable "itunesShowsPath.x" (x is a unique number) straight to the "TV shows" folder. The content of that folder should be the folders of your iTunes shows.</p><h4><a name="movies:"></a>Movies:</h4><p>For movies point "moviePath.x" to a folder that contains genre folders. Each genre folder contains the movie files that you file under that genre. So in my case I point the variable (from etc/mediaimport.properties) to: "/Volumes/Drobo/Mediathek/Movies". This folder contains genre folders like "Adventure", "Action", "Comedy". You can have as many and name them as you see fit. When the movie is imported into iTunes it will be filed under a genre category with that name. Then the genre folder contains your movie files. The file name of the movie will be used as it's name in iTunes.</p><h4><a name="tv&#95;shows:"></a>TV Shows:</h4><p>TV shows are handled much like movies except there is another directory layer, the season folder. In mediaimport.properties you find a key "tvSeriesPath.x" that points to a directory that forms the root of my tv shows archive, "/Volumes/Drobo/Mediathek/TV Series" in my case. Then this folder contains the names of my tv shows, like "Bones", "Stargate" or whatever your poison is. Now under that folder you need to define another folder named "S&lt;season number&gt;", so "Stargate/S3/" would be the 3rd season of Stargate. Under the season folder you file the tv shows that belong to that season, for instance: "Stargate 11 - Tokra.m4v". iTunesMediaImport will parse the file name backwards and stop at the first dash ('-') it finds. If it finds a number after the dash (looking towards the beginning of the filename) that number will become the show number in iTunes. The part after the dash until the end of the file name (except the .m4v extension) will become the name of the show. &mdash; iTunesMediaImport will keep a log of media files it has added into iTunes in order to avoid processing them over and over again. It will also delete shows from iTunes that have been deleted or renamed in your archive. I invite you to give it a try, if you want you are welcome to contribute to it on Google Code. There's also a forum for it <a href='http://helpdesk.agynamix.de/index.php?pg=forums.topics&id=6'>here</a>. Have fun!</p><h4><a name="references:"></a>References:</h4><ul><li>iTunesMediaImport on Google Code: <a href="http://code.google.com/p/itunesmediaimport/">http://code.google.com/p/itunesmediaimport/</a></li><li>iTunesMediaImport forum: <a href="http://helpdesk.agynamix.de/index.php?pg=forums.topics&id=6">http://helpdesk.agynamix.de/index.php?pg=forums.topics&id=6</a></li><li>My website: <a href="http://www.agynamix.de">http://www.agynamix.de</a></li></ul>
 </div>
 
 <div id="post-tags">
@@ -144,15 +147,6 @@
         
     </div>
 
-    
-    <div id="disqus_thread" style="margin-top:20px;" class="hidden-print"></div>
-    <script type="text/javascript">
-        (function() {
-            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-            dsq.src = '//agynamix.disqus.com/embed.js';
-            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-        })();
-    </script>
     
 
 
@@ -210,11 +204,11 @@
     <h2 class="post-title">Recent Posts</h2>
     <ul class="post-list">
       
+      <li><a href="/posts/2015-10-31-compiler-fails-with-linux-dir-encrypt.html" class="no-underline">Scala compiler fails with Linux directory encryption</a></li>
+      
+      <li><a href="/posts/2015-10-05-converting-old-wordpress-posts.html" class="no-underline">Converting my old Wordpress posts to Markdown</a></li>
+      
       <li><a href="/posts/2015-09-22-doo-and-figwheel.html" class="no-underline">ClojureScript Testing with Doo and Figwheel</a></li>
-      
-      <li><a href="/posts/2015-09-21-tunneling-ssh-connections.html" class="no-underline">Tunneling SSH Connections</a></li>
-      
-      <li><a href="/posts/2015-07-31-a-new-blog.html" class="no-underline">A New Time, a New Blog</a></li>
       
     </ul>
   </div>
@@ -257,6 +251,8 @@
       
       <li><a href="/tags/bug-tracking.html" class="no-underline">bug-tracking</a></li>
       
+      <li><a href="/tags/Scala.html" class="no-underline">Scala</a></li>
+      
       <li><a href="/tags/business.html" class="no-underline">business</a></li>
       
       <li><a href="/tags/docbook.html" class="no-underline">docbook</a></li>
@@ -269,11 +265,17 @@
       
       <li><a href="/tags/subversion.html" class="no-underline">subversion</a></li>
       
+      <li><a href="/tags/Linux.html" class="no-underline">Linux</a></li>
+      
+      <li><a href="/tags/Clojure.html" class="no-underline">Clojure</a></li>
+      
       <li><a href="/tags/gps.html" class="no-underline">gps</a></li>
       
       <li><a href="/tags/fritzbox-snom-phone.html" class="no-underline">fritzbox-snom-phone</a></li>
       
       <li><a href="/tags/dobudish.html" class="no-underline">dobudish</a></li>
+      
+      <li><a href="/tags/Ubuntu.html" class="no-underline">Ubuntu</a></li>
       
       <li><a href="/tags/itunes.html" class="no-underline">itunes</a></li>
       
@@ -383,15 +385,19 @@
   <!--<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>-->
 
   <!-- Bootstrap Core JavaScript -->
-  <script src="../js/bootstrap.min.js" type="text/javascript"></script>
+  <script src="/js/bootstrap.min.js" type="text/javascript"></script>
 
   <!-- Custom Theme JavaScript -->
-  <script src="../js/clean-blog.js" type="text/javascript"></script>
+  <script src="/js/clean-blog.js" type="text/javascript"></script>
 
   <script src="https://squaresend.com/squaresend.js"></script>
 
-  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
+  <script src="/js/highlight.pack.js" type="text/javascript"></script>
+  <!-- <script>hljs.initHighlightingOnLoad();</script> -->
+
+  <script type="text/javascript">
+    hljs.initHighlightingOnLoad();
+  </script>
 
   <script>
     sqs_title = "Drop Us a Line!";

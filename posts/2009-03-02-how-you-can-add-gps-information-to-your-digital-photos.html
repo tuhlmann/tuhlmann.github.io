@@ -12,18 +12,21 @@
   <title>AGYNAMIX: How you can add GPS information to your digital photos</title>
 
   <!-- Bootstrap Core CSS -->
-  <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
   <!-- Custom CSS -->
-  <link href="../css/clean-blog.css" rel="stylesheet" type="text/css" />
+  <link href="/css/clean-blog.css" rel="stylesheet" type="text/css" />
 
   <!-- Custom Fonts -->
   <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+  <!-- <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'> -->
+  <link href='https://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700italic,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Noto+Sans:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+  <!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'> -->
   <!--<link href='http://fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700' rel='stylesheet'
         type='text/css'>-->
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/styles/default.min.css">
+
 
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
@@ -105,14 +108,14 @@
 <div id="post">
     <div class="post-header">
     <div id="post-meta" class="row">
-        <div class="col-lg-6">March 2, 2009</div>
+        <div class="col-lg-6">2. März 2009</div>
         
     </div>
     <h2>How you can add GPS information to your digital photos</h2>
 </div>
 <div>
     
-    <p>One of the great waves of the last years is geotagging, meaning you keep track of the locations you have been with the means of a GPS tracker and than be able to create a map that shows the waypoint of your last trip. Of course geotagging is more but for the course of this article it generically means to tag something with GPS information.</p><p><a href='/img/uploads/2009/03/gps&#95;tagged&#95;photo.jpg'><img src="http://blog.agynamix.de/wp-content/uploads/2009/03/gps&#95;tagged&#95;photo-300x299.jpg" alt="" /></a></p><p>Lately I thought of a way to tag my digital photos with GPS information. Recent SLR cameras may come with a build in GPS but my Canon 400D is just 2 years old and I don't wont to buy a new one just because of this. A few days ago I figured out a pretty convenient way to record the location of where I am and later put this information into my photos. This procedure works under the assumption that both your GPS logger and your digital camera use nearly the same clock settings. <strong>Theory:</strong> The GPS logger records our present location every, say, 30 seconds. At home when you upload your photos to your camera you need a software that will look up the time code in your photo and then use that time code to look up a recording of a GPS location that was made to a close point in time. If no recording is found (say one minute before and after the time code of the photo) then no location information is added. <strong>Let's get to work:</strong> I found the following components best to work with:</p><ul><li>I use my Nokia E71 handy with integrated GPS chip as the logger. Whenever I shoot photos I start the logger (see below) and let it run in the background. You may use another GPS handy or even a specialized GPS logger. The system is pretty flexible and does work with a great number of components.</li><li>As a GPS logging software on my E71 I use <a href='http://linuxtechs.net/kruch/tb/forum/index.php'>TrekBuddy</a>. TrekBuddy is a free Java based tracking software. It does a lot more things like showing your present location on a map but I just use it to record my GPS location. The setup of the software is described on the Website. <strong>Update:</strong> It is important that you enable Tracklog logging. To do this go to <em>Settings-&gt;Location</em> and set Tracklog to "always". Below that you can change the interval a log entry is written. I have changed mine to 30s. After running the software it will create a folder TrekBuddy/tracks-gpx either on your phones card or internal memory, that depends on your device. That directory contains GPX files, one for each run of the software. Download these files to your computer.</li><li>A camera. Of course. You can use any brand you want, as long as it writes a time tag into your photos- which to my knowledge all cameras do. I use JPG to archive my photos. You can also use the RAW format. The software I use to merge GPS location into my photos supports some RAW formats (see below).</li><li>A software to merge GPS location information into your photos. For this I have found <a href='http://code.google.com/p/gpicsync/'>GPicSync</a>. GPicSync is a free software that takes a GPX file and a folder with to be tagged images and merges the two together. Please see <a href='http://code.google.com/p/gpicsync/wiki/RawFormats'>this site</a> if your RAW format is supported. Now, what if you have multiple GPX files to tag your photos with (for instance, one for each day): The only way I have found to handle this is to synchronize that image folder with each GPX file subsequentially. If a time stamp does not match between image and GPX entry then the image is not changed.</li><li>After that you can import your photos into your photo software. I use iPhoto 2009 which shows me the location of the photo when I click on the little "i".</li></ul><p>I have found that procedure to work and be pretty unobtrusive. Switching on the GPS logger on my handy is pretty easy and can run in background. Then the only additional steps are to download the GPX files from my handy (I do this through Bluetooth) and synchronize my photos via GPicSync. I can also no longer just upload my photos with iPhoto. Instead I use Image Capture which comes with my Mac to upload the camera's photos into a temp folder. After the sync I import them into iPhoto. I don't know about you but I really like knowing where I shot a photo even after a long period of time. What do you think about the process? We are now open to take comments!</p><p>–</p><p>My name is Torsten Uhlmann, I’m founder of <a href='http://www.agynamix.de/'>AGYNAMIX</a>, a tiny (sooo tiiiny its just me) software company specializing in Java software consulting for larger corporations.</p><p>I also develop <a href='http://www.simidude.com/'>Simidude</a>, a cross platform network clipboard and Drag&Drop tool which you might happen to find useful.</p>
+    <p>One of the great waves of the last years is geotagging, meaning you keep track of the locations you have been with the means of a GPS tracker and than be able to create a map that shows the waypoint of your last trip. Of course geotagging is more but for the course of this article it generically means to tag something with GPS information.</p><p><a href='/img/uploads/2009/03/gps_tagged_photo.jpg'><img src="http://blog.agynamix.de/wp-content/uploads/2009/03/gps_tagged_photo-300x299.jpg" alt="" /></a></p><p>Lately I thought of a way to tag my digital photos with GPS information. Recent SLR cameras may come with a build in GPS but my Canon 400D is just 2 years old and I don't wont to buy a new one just because of this. A few days ago I figured out a pretty convenient way to record the location of where I am and later put this information into my photos. This procedure works under the assumption that both your GPS logger and your digital camera use nearly the same clock settings. <strong>Theory:</strong> The GPS logger records our present location every, say, 30 seconds. At home when you upload your photos to your camera you need a software that will look up the time code in your photo and then use that time code to look up a recording of a GPS location that was made to a close point in time. If no recording is found (say one minute before and after the time code of the photo) then no location information is added. <strong>Let's get to work:</strong> I found the following components best to work with:</p><ul><li>I use my Nokia E71 handy with integrated GPS chip as the logger. Whenever I shoot photos I start the logger (see below) and let it run in the background. You may use another GPS handy or even a specialized GPS logger. The system is pretty flexible and does work with a great number of components.</li><li>As a GPS logging software on my E71 I use <a href='http://linuxtechs.net/kruch/tb/forum/index.php'>TrekBuddy</a>. TrekBuddy is a free Java based tracking software. It does a lot more things like showing your present location on a map but I just use it to record my GPS location. The setup of the software is described on the Website. <strong>Update:</strong> It is important that you enable Tracklog logging. To do this go to <em>Settings-&gt;Location</em> and set Tracklog to "always". Below that you can change the interval a log entry is written. I have changed mine to 30s. After running the software it will create a folder TrekBuddy/tracks-gpx either on your phones card or internal memory, that depends on your device. That directory contains GPX files, one for each run of the software. Download these files to your computer.</li><li>A camera. Of course. You can use any brand you want, as long as it writes a time tag into your photos- which to my knowledge all cameras do. I use JPG to archive my photos. You can also use the RAW format. The software I use to merge GPS location into my photos supports some RAW formats (see below).</li><li>A software to merge GPS location information into your photos. For this I have found <a href='http://code.google.com/p/gpicsync/'>GPicSync</a>. GPicSync is a free software that takes a GPX file and a folder with to be tagged images and merges the two together. Please see <a href='http://code.google.com/p/gpicsync/wiki/RawFormats'>this site</a> if your RAW format is supported. Now, what if you have multiple GPX files to tag your photos with (for instance, one for each day): The only way I have found to handle this is to synchronize that image folder with each GPX file subsequentially. If a time stamp does not match between image and GPX entry then the image is not changed.</li><li>After that you can import your photos into your photo software. I use iPhoto 2009 which shows me the location of the photo when I click on the little "i".</li></ul><p>I have found that procedure to work and be pretty unobtrusive. Switching on the GPS logger on my handy is pretty easy and can run in background. Then the only additional steps are to download the GPX files from my handy (I do this through Bluetooth) and synchronize my photos via GPicSync. I can also no longer just upload my photos with iPhoto. Instead I use Image Capture which comes with my Mac to upload the camera's photos into a temp folder. After the sync I import them into iPhoto. I don't know about you but I really like knowing where I shot a photo even after a long period of time. What do you think about the process? We are now open to take comments!</p><p>–</p><p>My name is Torsten Uhlmann, I’m founder of <a href='http://www.agynamix.de/'>AGYNAMIX</a>, a tiny (sooo tiiiny its just me) software company specializing in Java software consulting for larger corporations.</p><p>I also develop <a href='http://www.simidude.com/'>Simidude</a>, a cross platform network clipboard and Drag&Drop tool which you might happen to find useful.</p>
 </div>
 
 <div id="post-tags">
@@ -136,15 +139,6 @@
         
     </div>
 
-    
-    <div id="disqus_thread" style="margin-top:20px;" class="hidden-print"></div>
-    <script type="text/javascript">
-        (function() {
-            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-            dsq.src = '//agynamix.disqus.com/embed.js';
-            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-        })();
-    </script>
     
 
 
@@ -202,11 +196,11 @@
     <h2 class="post-title">Recent Posts</h2>
     <ul class="post-list">
       
+      <li><a href="/posts/2015-10-31-compiler-fails-with-linux-dir-encrypt.html" class="no-underline">Scala compiler fails with Linux directory encryption</a></li>
+      
+      <li><a href="/posts/2015-10-05-converting-old-wordpress-posts.html" class="no-underline">Converting my old Wordpress posts to Markdown</a></li>
+      
       <li><a href="/posts/2015-09-22-doo-and-figwheel.html" class="no-underline">ClojureScript Testing with Doo and Figwheel</a></li>
-      
-      <li><a href="/posts/2015-09-21-tunneling-ssh-connections.html" class="no-underline">Tunneling SSH Connections</a></li>
-      
-      <li><a href="/posts/2015-07-31-a-new-blog.html" class="no-underline">A New Time, a New Blog</a></li>
       
     </ul>
   </div>
@@ -249,6 +243,8 @@
       
       <li><a href="/tags/bug-tracking.html" class="no-underline">bug-tracking</a></li>
       
+      <li><a href="/tags/Scala.html" class="no-underline">Scala</a></li>
+      
       <li><a href="/tags/business.html" class="no-underline">business</a></li>
       
       <li><a href="/tags/docbook.html" class="no-underline">docbook</a></li>
@@ -261,11 +257,17 @@
       
       <li><a href="/tags/subversion.html" class="no-underline">subversion</a></li>
       
+      <li><a href="/tags/Linux.html" class="no-underline">Linux</a></li>
+      
+      <li><a href="/tags/Clojure.html" class="no-underline">Clojure</a></li>
+      
       <li><a href="/tags/gps.html" class="no-underline">gps</a></li>
       
       <li><a href="/tags/fritzbox-snom-phone.html" class="no-underline">fritzbox-snom-phone</a></li>
       
       <li><a href="/tags/dobudish.html" class="no-underline">dobudish</a></li>
+      
+      <li><a href="/tags/Ubuntu.html" class="no-underline">Ubuntu</a></li>
       
       <li><a href="/tags/itunes.html" class="no-underline">itunes</a></li>
       
@@ -375,15 +377,19 @@
   <!--<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>-->
 
   <!-- Bootstrap Core JavaScript -->
-  <script src="../js/bootstrap.min.js" type="text/javascript"></script>
+  <script src="/js/bootstrap.min.js" type="text/javascript"></script>
 
   <!-- Custom Theme JavaScript -->
-  <script src="../js/clean-blog.js" type="text/javascript"></script>
+  <script src="/js/clean-blog.js" type="text/javascript"></script>
 
   <script src="https://squaresend.com/squaresend.js"></script>
 
-  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
+  <script src="/js/highlight.pack.js" type="text/javascript"></script>
+  <!-- <script>hljs.initHighlightingOnLoad();</script> -->
+
+  <script type="text/javascript">
+    hljs.initHighlightingOnLoad();
+  </script>
 
   <script>
     sqs_title = "Drop Us a Line!";

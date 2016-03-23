@@ -12,18 +12,21 @@
   <title>AGYNAMIX: Integration between Asterisk PBX and the fantastic Open-Xchange</title>
 
   <!-- Bootstrap Core CSS -->
-  <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
   <!-- Custom CSS -->
-  <link href="../css/clean-blog.css" rel="stylesheet" type="text/css" />
+  <link href="/css/clean-blog.css" rel="stylesheet" type="text/css" />
 
   <!-- Custom Fonts -->
   <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+  <!-- <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'> -->
+  <link href='https://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700italic,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Noto+Sans:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+  <!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'> -->
   <!--<link href='http://fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700' rel='stylesheet'
         type='text/css'>-->
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/styles/default.min.css">
+
 
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
@@ -105,17 +108,14 @@
 <div id="post">
     <div class="post-header">
     <div id="post-meta" class="row">
-        <div class="col-lg-6">March 8, 2006</div>
+        <div class="col-lg-6">8. März 2006</div>
         
     </div>
     <h2>Integration between Asterisk PBX and the fantastic Open-Xchange</h2>
 </div>
 <div>
     
-    <p>We have created a small perl script that integrates OX with an Asterisk PBX. It uses Asterisk's Manager API which means OX and Asterisk can run on different machines. <a href='/img/uploads/2006/04/OX&#95;Click2Dial.jpg "OX Click2Dial"'><img src="/img/uploads/2006/04/OX&#95;Click2Dial.jpg" alt="OX Click2Dial" /></a></p><h2>Requirements:</h2><ul><li>We use the OXSession.pm Perl Module described <a href='http://www.open-xchange.org/oxwiki/Talking&#95;20to&#95;20the&#95;20Sessiond&#95;20with&#95;20Perl'>here</a>. Copy it into a directory OXtensions in a path where perl will find it (we put it directly into the cgi-bin next to the click-2-dial script)</li></ul><p><!-- --></p><ul><li>We use the following perl modules:        use lib '/usr/lib/cgi-bin'; use CGI; use Net::Telnet (); use Net::LDAP;<h2></li></ul></h2>Step by Step instructions:<h3><a name="on&#95;the&#95;asterisk&#95;side:"></a>On the Asterisk side:</h3><p>You need to include a user into Asterisk's manager.conf (/etc/asterisk in most cases):</p><pre><code>&#91;axdial&#93; secret = axdial deny=0.0.0.0/0.0.0.0 permit=127.0.0.1/255.255.255.255 read = system,call,log,verbose,command,agent,user write = system,call,log,verbose,command,agent,user
-</code></pre><p>If your OX Server runs on a different host and with it the click-2-dial script you need to adjust the <code>permit=</code> line. Also pick yourself a nice username (in square brackets) and secret.</p><h3><a name="on&#95;the&#95;ox&#95;side"></a>On the OX side</h3><p>The Open-Xchange guys were very smart and included some cool extension points into the groupware. For a detailed explanation please read <a href='http://www.open-xchange.org/oxwiki/CommunicationSolutions'>this</a>. So in the file <code>intranet.conf</code> you have several hooks you can activate. This has been tested with 0.8.2-RC3 but should work with 0.8.0-5 and above (as stated in the above document). ``</p><pre><code>$OX&#95;HOME/etc/groupware/intranet.conf faxURL=http://server/?fax=$fax&amp;name=$contact&#95;name&amp;uid=$user&#95;uid&amp; uid&#95;pass=$user&#95;pass&amp;uid&#95;name=$user&#95;name phoneURL=https://&#91;your-server&#93;/cgi-bin/ax&#95;asterisk.pl?session&#95;id=$sessionid&amp; to&#95;call=$phone smsURL=https://&#91;your-server&#93;/cgi-bin/ax&#95;asterisk.pl?session&#95;id=$sessionid&amp; to&#95;call=$sms
-</code></pre><pre><code># &quot;true&quot; uses webmail for sending a mail, &quot;link&quot; for external server # &quot;false&quot; makes nothing faxEnabled=link
-</code></pre><p>You must set <code>faxEnabled=link</code> in order to activate the links. You must activate all 3 of them or OX will throw a <span class="twikiNewLink">NullPointerException</span> (0.8.2-RC3). Next you need to copy the perl script ax&#95;asterisk.pl into your cgi-bin directory (usr/lib/cgi-bin und Debian/Ubuntu). Make sure Perl scripts can be executed as cgi scripts. Please open the script in an editor (vi) and check the variable section and the beginning of the script. In most cases you need to adjust them to your needs. The variables are explained in the script. The script will do the following:</p><ul><li>Whenever there is a telephone number, mobile no or fax number OX will place the code behind ...URL in its place. This makes the phone number clickable. It will open a small popup window (at least on my machine <img src="https://kaleb/twiki/pub/TWiki/SmiliesPlugin/smile.gif" alt="smile" title="smile" /> ) and display error messages there (in case there are any). If successful the window will close automatically. The script is called with the sessionID of the user that clicked and the number that should be dialed.</li><li>The script will use OXSession to look into the given session and check if it's valid. If not you will see an error message</li><li>It will then create an LDAP connection to read the user's 'Pager' number. This field must hold the internal extension number that Asterisk should call.</li><li>If it has collected all data without error it will use the Asterisk Manager to originate a call.</li><li>After the user phone rings, the user picks up the phone and Asterisk will then dial the given number.</li></ul><p>I hope you find this script useful. Resources: <span id="p33"><a href='/img/uploads/2006/04/ax&#95;asterisk.zip'>ax&#95;asterisk.zip</a></span></p>
+    <p>We have created a small perl script that integrates OX with an Asterisk PBX. It uses Asterisk's Manager API which means OX and Asterisk can run on different machines. <a href='/img/uploads/2006/04/OX_Click2Dial.jpg "OX Click2Dial"'><img src="/img/uploads/2006/04/OX_Click2Dial.jpg" alt="OX Click2Dial" /></a></p><h2>Requirements:</h2><ul><li>We use the OXSession.pm Perl Module described <a href='http://www.open-xchange.org/oxwiki/Talking_20to_20the_20Sessiond_20with_20Perl'>here</a>. Copy it into a directory OXtensions in a path where perl will find it (we put it directly into the cgi-bin next to the click-2-dial script)</li></ul><p><!&ndash; &ndash;></p><ul><li>We use the following perl modules:</li></ul><pre><code>    use lib '/usr/lib/cgi-bin'; use CGI; use Net::Telnet &#40;&#41;; use Net::LDAP;</code></pre><h2>Step by Step instructions:</h2><h3><a name="on&#95;the&#95;asterisk&#95;side:"></a>On the Asterisk side:</h3><p>You need to include a user into Asterisk's manager.conf (/etc/asterisk in most cases):</p><pre><code>&#91;axdial&#93; secret = axdial deny=0.0.0.0/0.0.0.0 permit=127.0.0.1/255.255.255.255 read = system,call,log,verbose,command,agent,user write = system,call,log,verbose,command,agent,user</code></pre><p>If your OX Server runs on a different host and with it the click-2-dial script you need to adjust the <code>permit=</code> line. Also pick yourself a nice username (in square brackets) and secret.</p><h3><a name="on&#95;the&#95;ox&#95;side"></a>On the OX side</h3><p>The Open-Xchange guys were very smart and included some cool extension points into the groupware. For a detailed explanation please read <a href='http://www.open-xchange.org/oxwiki/CommunicationSolutions'>this</a>. So in the file <code>intranet.conf</code> you have several hooks you can activate. This has been tested with 0.8.2-RC3 but should work with 0.8.0-5 and above (as stated in the above document). ``</p><pre><code>$OX&#95;HOME/etc/groupware/intranet.conf faxURL=http://server/?fax=$fax&amp;name=$contact&#95;name&amp;uid=$user&#95;uid&amp; uid&#95;pass=$user&#95;pass&amp;uid&#95;name=$user&#95;name phoneURL=https://&#91;your-server&#93;/cgi-bin/ax&#95;asterisk.pl?session&#95;id=$sessionid&amp; to&#95;call=$phone smsURL=https://&#91;your-server&#93;/cgi-bin/ax&#95;asterisk.pl?session&#95;id=$sessionid&amp; to&#95;call=$sms</code></pre><pre><code># &quot;true&quot; uses webmail for sending a mail, &quot;link&quot; for external server # &quot;false&quot; makes nothing faxEnabled=link</code></pre><p>You must set <code>faxEnabled=link</code> in order to activate the links. You must activate all 3 of them or OX will throw a <span class="twikiNewLink">NullPointerException</span> (0.8.2-RC3). Next you need to copy the perl script ax&#95;asterisk.pl into your cgi-bin directory (usr/lib/cgi-bin und Debian/Ubuntu). Make sure Perl scripts can be executed as cgi scripts. Please open the script in an editor (vi) and check the variable section and the beginning of the script. In most cases you need to adjust them to your needs. The variables are explained in the script. The script will do the following:</p><ul><li>Whenever there is a telephone number, mobile no or fax number OX will place the code behind ...URL in its place. This makes the phone number clickable. It will open a small popup window (at least on my machine <img src="https://kaleb/twiki/pub/TWiki/SmiliesPlugin/smile.gif" alt="smile" title="smile" /> ) and display error messages there (in case there are any). If successful the window will close automatically. The script is called with the sessionID of the user that clicked and the number that should be dialed.</li><li>The script will use OXSession to look into the given session and check if it's valid. If not you will see an error message</li><li>It will then create an LDAP connection to read the user's 'Pager' number. This field must hold the internal extension number that Asterisk should call.</li><li>If it has collected all data without error it will use the Asterisk Manager to originate a call.</li><li>After the user phone rings, the user picks up the phone and Asterisk will then dial the given number.</li></ul><p>I hope you find this script useful. Resources: <span id="p33"><a href='/img/uploads/2006/04/ax_asterisk.zip'>ax&#95;asterisk.zip</a></span></p>
 </div>
 
 <div id="post-tags">
@@ -139,15 +139,6 @@
         
     </div>
 
-    
-    <div id="disqus_thread" style="margin-top:20px;" class="hidden-print"></div>
-    <script type="text/javascript">
-        (function() {
-            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-            dsq.src = '//agynamix.disqus.com/embed.js';
-            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-        })();
-    </script>
     
 
 
@@ -205,11 +196,11 @@
     <h2 class="post-title">Recent Posts</h2>
     <ul class="post-list">
       
+      <li><a href="/posts/2015-10-31-compiler-fails-with-linux-dir-encrypt.html" class="no-underline">Scala compiler fails with Linux directory encryption</a></li>
+      
+      <li><a href="/posts/2015-10-05-converting-old-wordpress-posts.html" class="no-underline">Converting my old Wordpress posts to Markdown</a></li>
+      
       <li><a href="/posts/2015-09-22-doo-and-figwheel.html" class="no-underline">ClojureScript Testing with Doo and Figwheel</a></li>
-      
-      <li><a href="/posts/2015-09-21-tunneling-ssh-connections.html" class="no-underline">Tunneling SSH Connections</a></li>
-      
-      <li><a href="/posts/2015-07-31-a-new-blog.html" class="no-underline">A New Time, a New Blog</a></li>
       
     </ul>
   </div>
@@ -252,6 +243,8 @@
       
       <li><a href="/tags/bug-tracking.html" class="no-underline">bug-tracking</a></li>
       
+      <li><a href="/tags/Scala.html" class="no-underline">Scala</a></li>
+      
       <li><a href="/tags/business.html" class="no-underline">business</a></li>
       
       <li><a href="/tags/docbook.html" class="no-underline">docbook</a></li>
@@ -264,11 +257,17 @@
       
       <li><a href="/tags/subversion.html" class="no-underline">subversion</a></li>
       
+      <li><a href="/tags/Linux.html" class="no-underline">Linux</a></li>
+      
+      <li><a href="/tags/Clojure.html" class="no-underline">Clojure</a></li>
+      
       <li><a href="/tags/gps.html" class="no-underline">gps</a></li>
       
       <li><a href="/tags/fritzbox-snom-phone.html" class="no-underline">fritzbox-snom-phone</a></li>
       
       <li><a href="/tags/dobudish.html" class="no-underline">dobudish</a></li>
+      
+      <li><a href="/tags/Ubuntu.html" class="no-underline">Ubuntu</a></li>
       
       <li><a href="/tags/itunes.html" class="no-underline">itunes</a></li>
       
@@ -378,15 +377,19 @@
   <!--<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>-->
 
   <!-- Bootstrap Core JavaScript -->
-  <script src="../js/bootstrap.min.js" type="text/javascript"></script>
+  <script src="/js/bootstrap.min.js" type="text/javascript"></script>
 
   <!-- Custom Theme JavaScript -->
-  <script src="../js/clean-blog.js" type="text/javascript"></script>
+  <script src="/js/clean-blog.js" type="text/javascript"></script>
 
   <script src="https://squaresend.com/squaresend.js"></script>
 
-  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
+  <script src="/js/highlight.pack.js" type="text/javascript"></script>
+  <!-- <script>hljs.initHighlightingOnLoad();</script> -->
+
+  <script type="text/javascript">
+    hljs.initHighlightingOnLoad();
+  </script>
 
   <script>
     sqs_title = "Drop Us a Line!";

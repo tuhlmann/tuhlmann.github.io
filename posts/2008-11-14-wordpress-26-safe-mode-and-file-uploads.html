@@ -12,18 +12,21 @@
   <title>AGYNAMIX: Wordpress 2.6, safe_mode and file uploads</title>
 
   <!-- Bootstrap Core CSS -->
-  <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
   <!-- Custom CSS -->
-  <link href="../css/clean-blog.css" rel="stylesheet" type="text/css" />
+  <link href="/css/clean-blog.css" rel="stylesheet" type="text/css" />
 
   <!-- Custom Fonts -->
   <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+  <!-- <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'> -->
+  <link href='https://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700italic,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Noto+Sans:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+  <!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'> -->
   <!--<link href='http://fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700' rel='stylesheet'
         type='text/css'>-->
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/styles/default.min.css">
+
 
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
@@ -105,14 +108,14 @@
 <div id="post">
     <div class="post-header">
     <div id="post-meta" class="row">
-        <div class="col-lg-6">November 14, 2008</div>
+        <div class="col-lg-6">14. November 2008</div>
         
     </div>
     <h2>Wordpress 2.6, safe_mode and file uploads</h2>
 </div>
 <div>
     
-    <p>Since I'm (most of the time) a responsible internet user I try to keep my web applications up to date.</p><p>In <a href='http://blog.agynamix.de/blog/2008/keep-wordpress-up-to-date-with-subversion/'>this article</a> I describe how you can keep Wordpress up to date with updates directly from the source. Now I've done that for this blog and my new <a href='http://www.simidude.com'>Simidude website</a>. All went well, software got updated and I got a good feeling knowing I did something for peace on the internet.</p><p>Now these days I wanted to write some new articles including some charming images. Images in posts are great because the just make the post more pleasant.</p><p>So I cheerfully wrote some text about our <a href='http://www.simidude.com/blog/2008/simidude-screenshots/'>new baby boy "Sim"</a> whom I like to call Simi dude and I also wanted to include some screenshots about how he looks by now so that, in a few weeks or so, people would see how fast he has grown and become a real boy.</p><p>Hm, suddenly Wordpress bombards me with the following error message while I was trying to upload a foto:</p><blockquote><p> Unable to create directory "&#91;...&#93;/uploads/2008/11". Is its parent directory writeable by server? </p></blockquote><p>Of course it is writable! And sure enough it worked a few weeks ago. (well actually month- the last time I uploaded an image into this blog was in May. I'm ashamed.)</p><p>Since I'm running a real root server with ssh access I went to the server and toyed with the Unix file permissions. So I tried setting the wp-content directory world-writable (777). No effect, same error message. FYI I changed the settings back- no need to hack the server...</p><p>Then I realized the following:</p><p><a href='/img/uploads/2008/11/linstow&#95;006.jpg'><img src="http://blog.agynamix.de/wp-content/uploads/2008/11/linstow&#95;006-224x300.jpg" alt="" title= "linstow&#95;006" /></a></p><p>The uploads directory was owned by web4.www-data. web4 is my user account on the machine, www-data is the user and group of the Apache server (standard on Debian based systems).</p><p>A directory "2008" was actually created with the owner "www-data.www-data" because it had been created by the Apache server through the PHP script. Just the "11" directory could not be created. So I did this by hand, setting ownership to www-data.www-data. Now I rushed over to the upload dialog being pretty sure it would work now. No luck! Still I received an error message (see above) that this directory could not be created.</p><p>After spending some time with my friend Google and reading helpless posts that sugessted setting the file permissions to 777 and don't care about the rest I came across some explanation of PHP safe&#95;mode (did I mention I use safe&#95;mode on)?</p><p>What matters here is that safe&#95;mode checks if the executed script belongs to the same owner as the directory it writes into. Now my Wordpress installation belongs to web4.www-data so that I could use FTP or SSH to connect as user web4 and actually have write permission.</p><p>So the script that uploads the image tries to create the directory "2008". That works because the parent directory, "uploads", belong to web4.www-data. But the created directory "2008" is now owned by www-data.www-data because it was created by the Apache server. When it tries to create "11" inside "2008" it fails miserably because "2008" is not owned by web4.</p><p>After creating the directory "11" by hand and changing the ownership of "2008" and "11" to web4.www-data I was able to upload images!</p><p>Now for a somewhat permanent solution because I don't want to go to my server each month and create a new directory by hand:</p><p>Apparently there is a setting in php.ini which tells the safe&#95;mode to not just look at the owner of a file but also the goup of it. The setting is called:</p><blockquote><p> <strong>safe&#95;mode&#95;gid = On</strong> </p></blockquote><p>It was Off in my case. After changing it and restarting Apache I could readily create directories and upload images.</p><p>Now if you can't change that setting because you don't have root access it might also work if you can change the ownership of your Wordpress php files to www-data.www-data. Because after you've done that the user of the script and of the created directory would match again.</p><p>Hope this saves some of your time!</p>
+    <p>Since I'm (most of the time) a responsible internet user I try to keep my web applications up to date.</p><p>In <a href='http://blog.agynamix.de/blog/2008/keep-wordpress-up-to-date-with-subversion/'>this article</a> I describe how you can keep Wordpress up to date with updates directly from the source. Now I've done that for this blog and my new <a href='http://www.simidude.com'>Simidude website</a>. All went well, software got updated and I got a good feeling knowing I did something for peace on the internet.</p><p>Now these days I wanted to write some new articles including some charming images. Images in posts are great because the just make the post more pleasant.</p><p>So I cheerfully wrote some text about our <a href='http://www.simidude.com/blog/2008/simidude-screenshots/'>new baby boy "Sim"</a> whom I like to call Simi dude and I also wanted to include some screenshots about how he looks by now so that, in a few weeks or so, people would see how fast he has grown and become a real boy.</p><p>Hm, suddenly Wordpress bombards me with the following error message while I was trying to upload a foto:</p><blockquote><p> Unable to create directory "&#91;...&#93;/uploads/2008/11". Is its parent directory writeable by server? </p></blockquote><p>Of course it is writable! And sure enough it worked a few weeks ago. (well actually month- the last time I uploaded an image into this blog was in May. I'm ashamed.)</p><p>Since I'm running a real root server with ssh access I went to the server and toyed with the Unix file permissions. So I tried setting the wp-content directory world-writable (777). No effect, same error message. FYI I changed the settings back- no need to hack the server...</p><p>Then I realized the following:</p><p><a href='/img/uploads/2008/11/linstow_006.jpg'><img src="http://blog.agynamix.de/wp-content/uploads/2008/11/linstow_006-224x300.jpg" alt="" title= "linstow_006" /></a></p><p>The uploads directory was owned by web4.www-data. web4 is my user account on the machine, www-data is the user and group of the Apache server (standard on Debian based systems).</p><p>A directory "2008" was actually created with the owner "www-data.www-data" because it had been created by the Apache server through the PHP script. Just the "11" directory could not be created. So I did this by hand, setting ownership to www-data.www-data. Now I rushed over to the upload dialog being pretty sure it would work now. No luck! Still I received an error message (see above) that this directory could not be created.</p><p>After spending some time with my friend Google and reading helpless posts that sugessted setting the file permissions to 777 and don't care about the rest I came across some explanation of PHP safe&#95;mode (did I mention I use safe&#95;mode on)?</p><p>What matters here is that safe&#95;mode checks if the executed script belongs to the same owner as the directory it writes into. Now my Wordpress installation belongs to web4.www-data so that I could use FTP or SSH to connect as user web4 and actually have write permission.</p><p>So the script that uploads the image tries to create the directory "2008". That works because the parent directory, "uploads", belong to web4.www-data. But the created directory "2008" is now owned by www-data.www-data because it was created by the Apache server. When it tries to create "11" inside "2008" it fails miserably because "2008" is not owned by web4.</p><p>After creating the directory "11" by hand and changing the ownership of "2008" and "11" to web4.www-data I was able to upload images!</p><p>Now for a somewhat permanent solution because I don't want to go to my server each month and create a new directory by hand:</p><p>Apparently there is a setting in php.ini which tells the safe&#95;mode to not just look at the owner of a file but also the goup of it. The setting is called:</p><blockquote><p> <strong>safe&#95;mode&#95;gid = On</strong> </p></blockquote><p>It was Off in my case. After changing it and restarting Apache I could readily create directories and upload images.</p><p>Now if you can't change that setting because you don't have root access it might also work if you can change the ownership of your Wordpress php files to www-data.www-data. Because after you've done that the user of the script and of the created directory would match again.</p><p>Hope this saves some of your time!</p>
 </div>
 
 <div id="post-tags">
@@ -134,15 +137,6 @@
         
     </div>
 
-    
-    <div id="disqus_thread" style="margin-top:20px;" class="hidden-print"></div>
-    <script type="text/javascript">
-        (function() {
-            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-            dsq.src = '//agynamix.disqus.com/embed.js';
-            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-        })();
-    </script>
     
 
 
@@ -200,11 +194,11 @@
     <h2 class="post-title">Recent Posts</h2>
     <ul class="post-list">
       
+      <li><a href="/posts/2015-10-31-compiler-fails-with-linux-dir-encrypt.html" class="no-underline">Scala compiler fails with Linux directory encryption</a></li>
+      
+      <li><a href="/posts/2015-10-05-converting-old-wordpress-posts.html" class="no-underline">Converting my old Wordpress posts to Markdown</a></li>
+      
       <li><a href="/posts/2015-09-22-doo-and-figwheel.html" class="no-underline">ClojureScript Testing with Doo and Figwheel</a></li>
-      
-      <li><a href="/posts/2015-09-21-tunneling-ssh-connections.html" class="no-underline">Tunneling SSH Connections</a></li>
-      
-      <li><a href="/posts/2015-07-31-a-new-blog.html" class="no-underline">A New Time, a New Blog</a></li>
       
     </ul>
   </div>
@@ -247,6 +241,8 @@
       
       <li><a href="/tags/bug-tracking.html" class="no-underline">bug-tracking</a></li>
       
+      <li><a href="/tags/Scala.html" class="no-underline">Scala</a></li>
+      
       <li><a href="/tags/business.html" class="no-underline">business</a></li>
       
       <li><a href="/tags/docbook.html" class="no-underline">docbook</a></li>
@@ -259,11 +255,17 @@
       
       <li><a href="/tags/subversion.html" class="no-underline">subversion</a></li>
       
+      <li><a href="/tags/Linux.html" class="no-underline">Linux</a></li>
+      
+      <li><a href="/tags/Clojure.html" class="no-underline">Clojure</a></li>
+      
       <li><a href="/tags/gps.html" class="no-underline">gps</a></li>
       
       <li><a href="/tags/fritzbox-snom-phone.html" class="no-underline">fritzbox-snom-phone</a></li>
       
       <li><a href="/tags/dobudish.html" class="no-underline">dobudish</a></li>
+      
+      <li><a href="/tags/Ubuntu.html" class="no-underline">Ubuntu</a></li>
       
       <li><a href="/tags/itunes.html" class="no-underline">itunes</a></li>
       
@@ -373,15 +375,19 @@
   <!--<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>-->
 
   <!-- Bootstrap Core JavaScript -->
-  <script src="../js/bootstrap.min.js" type="text/javascript"></script>
+  <script src="/js/bootstrap.min.js" type="text/javascript"></script>
 
   <!-- Custom Theme JavaScript -->
-  <script src="../js/clean-blog.js" type="text/javascript"></script>
+  <script src="/js/clean-blog.js" type="text/javascript"></script>
 
   <script src="https://squaresend.com/squaresend.js"></script>
 
-  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
+  <script src="/js/highlight.pack.js" type="text/javascript"></script>
+  <!-- <script>hljs.initHighlightingOnLoad();</script> -->
+
+  <script type="text/javascript">
+    hljs.initHighlightingOnLoad();
+  </script>
 
   <script>
     sqs_title = "Drop Us a Line!";

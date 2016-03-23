@@ -2,9 +2,6 @@
 <rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'>
 <channel>
 <atom:link href='http://agynamix.de/' rel='self' type='application/rss+xml'/>
-<generator>
-clj-rss
-</generator>
 <title>
 AGYNAMIX
 </title>
@@ -15,8 +12,11 @@ http://agynamix.de/
 This blog is awesome
 </description>
 <lastBuildDate>
-Thu, 24 Sep 2015 21:29:46 +0200
+Wed, 23 Mar 2016 12:17:22 +0100
 </lastBuildDate>
+<generator>
+clj-rss
+</generator>
 <item>
 <guid>
 http://agynamix.de/posts/2015-07-31-a-new-blog.html
@@ -90,6 +90,9 @@ project.&lt;/p&gt;
 I will keep on posting stuff.&lt;/p&gt;
 &lt;/div&gt;
 </description>
+<enclosure>
+
+</enclosure>
 <pubDate>
 Fri, 31 Jul 2015 00:00:00 +0200
 </pubDate>

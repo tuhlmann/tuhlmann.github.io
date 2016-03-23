@@ -12,18 +12,21 @@
   <title>AGYNAMIX: How to migrate your Thunderbird mail to Outlook</title>
 
   <!-- Bootstrap Core CSS -->
-  <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
   <!-- Custom CSS -->
-  <link href="../css/clean-blog.css" rel="stylesheet" type="text/css" />
+  <link href="/css/clean-blog.css" rel="stylesheet" type="text/css" />
 
   <!-- Custom Fonts -->
   <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+  <!-- <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'> -->
+  <link href='https://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700italic,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Noto+Sans:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+  <!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'> -->
   <!--<link href='http://fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700' rel='stylesheet'
         type='text/css'>-->
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/styles/default.min.css">
+
 
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
@@ -105,14 +108,14 @@
 <div id="post">
     <div class="post-header">
     <div id="post-meta" class="row">
-        <div class="col-lg-6">August 15, 2006</div>
+        <div class="col-lg-6">15. August 2006</div>
         
     </div>
     <h2>How to migrate your Thunderbird mail to Outlook</h2>
 </div>
 <div>
     
-    <p>Now, Thunderbird is a wonderful email client. I like it. I really do! For instance there is that nifty little feature which let's you edit a sent mail as if it were brand new. Cool. But in a corporate environment where everybody else is exchanging contacts, appointments and other PIM data via Outlook it's just uncool to open you vcard files with an ordinary editor. So I decided to jump upon the Outlook wagon. But I didn't want to loose my Thunderbird mail archive which keeps mails of my different projects as reference points. The problem however is that Outlook can't directly import mail from Thunderbird, only from Eudora and Outlook Express. Outlook Express in turn can import from older versions of Netscape Communicator, but not from Thunderbird. But I wouldn't write this entry if I didn't succeed. So here's what I did:</p><ul><li>I installed Netscape Communicator 4.78 (<a href='http://download.freenet.de/download.php?file&#95;id=3745&download=Netscape%20Communicator'>here</a>) and created an email account in Netscape Messenger. After that I closed the Messenger</li><li>Netscape put my user data into C:&#92;Programme&#92;Netscape&#92;Users&#92;tuhlmann. Within that directory there is a folder called 'Mail'. Rename it and create a new folder 'Mail'.</li><li>Copy the content of Thunderbirds 'Local Folders' directory into this 'Mail' dir. Thunderbird usually stores it's profiles under C:&#92;Dokumente und Einstellungen&#92;&#92;Anwendungsdaten&#92;Thunderbird. Of course on an english windows the names would differ.</li><li>After copying the tree remove all the .msf files (in the new location, not on Thunderbird's side)</li><li>Then start Netscape Messenger. You should now see all your mails and folders. Highlight all folders and choose File-&gt;Compress. This will create Netscapes old index. After that close Netscape again.</li><li>Then start Outlook Express and create a mail account there. Then say Import from Netscape Communicator and choose the 'Mail' directory of Netscape Messenger. The import should begin now. In the end all your mails should now be available from Outlook Express. Now you close Outlook Express</li><li>Last step: Start Outlook and create- yep, you guessed it- a mail account. No import your mail from Outlook Express. In the end, all your mail is available from Outlook (I used Outlook 2003 here but I guess it will work with older versions, too.).</li></ul><p>You still have to recreate all filters. And I did not look into migrating the spam filter training data. Maybe this is a product idea: Create a mail tool migrator which can migrate form/to different mail systems... I hope this little howto will be useful for someone...</p>
+    <p>Now, Thunderbird is a wonderful email client. I like it. I really do! For instance there is that nifty little feature which let's you edit a sent mail as if it were brand new. Cool. But in a corporate environment where everybody else is exchanging contacts, appointments and other PIM data via Outlook it's just uncool to open you vcard files with an ordinary editor. So I decided to jump upon the Outlook wagon. But I didn't want to loose my Thunderbird mail archive which keeps mails of my different projects as reference points. The problem however is that Outlook can't directly import mail from Thunderbird, only from Eudora and Outlook Express. Outlook Express in turn can import from older versions of Netscape Communicator, but not from Thunderbird. But I wouldn't write this entry if I didn't succeed. So here's what I did:</p><ul><li>I installed Netscape Communicator 4.78 (<a href='http://download.freenet.de/download.php?file_id=3745&download=Netscape%20Communicator'>here</a>) and created an email account in Netscape Messenger. After that I closed the Messenger</li><li>Netscape put my user data into C:&#92;Programme&#92;Netscape&#92;Users&#92;tuhlmann. Within that directory there is a folder called 'Mail'. Rename it and create a new folder 'Mail'.</li><li>Copy the content of Thunderbirds 'Local Folders' directory into this 'Mail' dir. Thunderbird usually stores it's profiles under C:&#92;Dokumente und Einstellungen&#92;&#92;Anwendungsdaten&#92;Thunderbird. Of course on an english windows the names would differ.</li><li>After copying the tree remove all the .msf files (in the new location, not on Thunderbird's side)</li><li>Then start Netscape Messenger. You should now see all your mails and folders. Highlight all folders and choose File-&gt;Compress. This will create Netscapes old index. After that close Netscape again.</li><li>Then start Outlook Express and create a mail account there. Then say Import from Netscape Communicator and choose the 'Mail' directory of Netscape Messenger. The import should begin now. In the end all your mails should now be available from Outlook Express. Now you close Outlook Express</li><li>Last step: Start Outlook and create- yep, you guessed it- a mail account. No import your mail from Outlook Express. In the end, all your mail is available from Outlook (I used Outlook 2003 here but I guess it will work with older versions, too.).</li></ul><p>You still have to recreate all filters. And I did not look into migrating the spam filter training data. Maybe this is a product idea: Create a mail tool migrator which can migrate form/to different mail systems... I hope this little howto will be useful for someone...</p>
 </div>
 
 <div id="post-tags">
@@ -134,15 +137,6 @@
         
     </div>
 
-    
-    <div id="disqus_thread" style="margin-top:20px;" class="hidden-print"></div>
-    <script type="text/javascript">
-        (function() {
-            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-            dsq.src = '//agynamix.disqus.com/embed.js';
-            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-        })();
-    </script>
     
 
 
@@ -200,11 +194,11 @@
     <h2 class="post-title">Recent Posts</h2>
     <ul class="post-list">
       
+      <li><a href="/posts/2015-10-31-compiler-fails-with-linux-dir-encrypt.html" class="no-underline">Scala compiler fails with Linux directory encryption</a></li>
+      
+      <li><a href="/posts/2015-10-05-converting-old-wordpress-posts.html" class="no-underline">Converting my old Wordpress posts to Markdown</a></li>
+      
       <li><a href="/posts/2015-09-22-doo-and-figwheel.html" class="no-underline">ClojureScript Testing with Doo and Figwheel</a></li>
-      
-      <li><a href="/posts/2015-09-21-tunneling-ssh-connections.html" class="no-underline">Tunneling SSH Connections</a></li>
-      
-      <li><a href="/posts/2015-07-31-a-new-blog.html" class="no-underline">A New Time, a New Blog</a></li>
       
     </ul>
   </div>
@@ -247,6 +241,8 @@
       
       <li><a href="/tags/bug-tracking.html" class="no-underline">bug-tracking</a></li>
       
+      <li><a href="/tags/Scala.html" class="no-underline">Scala</a></li>
+      
       <li><a href="/tags/business.html" class="no-underline">business</a></li>
       
       <li><a href="/tags/docbook.html" class="no-underline">docbook</a></li>
@@ -259,11 +255,17 @@
       
       <li><a href="/tags/subversion.html" class="no-underline">subversion</a></li>
       
+      <li><a href="/tags/Linux.html" class="no-underline">Linux</a></li>
+      
+      <li><a href="/tags/Clojure.html" class="no-underline">Clojure</a></li>
+      
       <li><a href="/tags/gps.html" class="no-underline">gps</a></li>
       
       <li><a href="/tags/fritzbox-snom-phone.html" class="no-underline">fritzbox-snom-phone</a></li>
       
       <li><a href="/tags/dobudish.html" class="no-underline">dobudish</a></li>
+      
+      <li><a href="/tags/Ubuntu.html" class="no-underline">Ubuntu</a></li>
       
       <li><a href="/tags/itunes.html" class="no-underline">itunes</a></li>
       
@@ -373,15 +375,19 @@
   <!--<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>-->
 
   <!-- Bootstrap Core JavaScript -->
-  <script src="../js/bootstrap.min.js" type="text/javascript"></script>
+  <script src="/js/bootstrap.min.js" type="text/javascript"></script>
 
   <!-- Custom Theme JavaScript -->
-  <script src="../js/clean-blog.js" type="text/javascript"></script>
+  <script src="/js/clean-blog.js" type="text/javascript"></script>
 
   <script src="https://squaresend.com/squaresend.js"></script>
 
-  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
+  <script src="/js/highlight.pack.js" type="text/javascript"></script>
+  <!-- <script>hljs.initHighlightingOnLoad();</script> -->
+
+  <script type="text/javascript">
+    hljs.initHighlightingOnLoad();
+  </script>
 
   <script>
     sqs_title = "Drop Us a Line!";

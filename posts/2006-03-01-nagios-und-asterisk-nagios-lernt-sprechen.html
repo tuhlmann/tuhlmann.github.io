@@ -12,18 +12,21 @@
   <title>AGYNAMIX: Nagios und Asterisk (Nagios lernt sprechen)</title>
 
   <!-- Bootstrap Core CSS -->
-  <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
   <!-- Custom CSS -->
-  <link href="../css/clean-blog.css" rel="stylesheet" type="text/css" />
+  <link href="/css/clean-blog.css" rel="stylesheet" type="text/css" />
 
   <!-- Custom Fonts -->
   <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+  <!-- <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'> -->
+  <link href='https://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700italic,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Noto+Sans:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+  <!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'> -->
   <!--<link href='http://fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700' rel='stylesheet'
         type='text/css'>-->
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/styles/default.min.css">
+
 
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
@@ -105,20 +108,14 @@
 <div id="post">
     <div class="post-header">
     <div id="post-meta" class="row">
-        <div class="col-lg-6">March 1, 2006</div>
+        <div class="col-lg-6">1. März 2006</div>
         
     </div>
     <h2>Nagios und Asterisk (Nagios lernt sprechen)</h2>
 </div>
 <div>
     
-    <p>Da wir ja bei uns eine <a href='http://www.asterisk.org'>Asterisk</a>-Telefonanlage im Einsatz haben (Hint: wir verkaufen die auch!) und außerdem ein Nagios-Monitoringsystem (NMS: Network Management System), lag die Idee ja nahe, Nagios über Asterisk reden zu lassen. Dazu habe ich folgendes gemacht: Im Nagios ein neues Kommando notify-by-asterisk angelegt, dass im entsprechenden Kontakt angegeben wird. Das Kommando selbst ist recht simpel:</p><pre><code># 'notify-by-asterisk' command definition define command{ command&#95;name notify-by-asterisk command&#95;line /usr/local/nagios/bin/asterisk&#95;call.sh $NOTIFICATIONTYPE$ $SERVICEDESC$ $HOSTALIAS$ $SERVICESTATE$ $SERVICEOUTPUT$ }
-</code></pre><p>Das Skript asterisk&#95;call.sh ist ein einfaches Shellskript, das zuerst einen Textstring erzeugt, diesen dann durch Festival jagt (erzeugt eine Wav-Datei) und anschließend eine Asterisk-Call-Datei erzeugt, die dann in das outgoing-Verzeichnis von Asterisk kopiert wird. Asterisk nimmt die Datei, generiert einen Anruf und spielt die wav-Datei ab.</p><p><img src="/img/uploads/2006/03/103-0391&#95;img.jpg" alt="103-0391&#95;img.jpg" title="103-0391&#95;img.jpg" /></p><p>Die Lösung funktioniert auf unserem System. Damit sie auch woanders läuft müssen noch ein paar Einstellungen vorgenommen werden:</p><ul><li>visudo ausführen: Der Nagios-User (bei mir: nagios) braucht das Recht, eine Datei als User www-data (unter dem läuft Asterisk bei mir. Ist der Web-User weil ich zusätzlich noch AMP im Einsatz habe und hier gibt es Rechtekonflikte, wenn AMP als Webapplikation nicht auf die Asteriskdateien zugreifen darf.) in das Asterisk outgoing-Verzeichnis (<em>/var/spool/asterisk/outgoing</em>) zu dürfen:</li><li>nagios ALL = (www-data NOPASSWD:) /bin/cp</li><li>Die Datei asterisk&#95;call.sh anpassen und für nagios ausführbar in <em>/usr/local/nagios/bin</em> (oder woanders, dann aber das Nagios-Kommando anpassen) zur Verfügung stellen:</li></ul><p><!-- --></p><pre><code>#!/bin/sh
-</code></pre><pre><code>NOTIFICATIONTYPE=$1 SERVICEDESC=$2 HOSTALIAS=$3 SERVICESTATE=$4 SERVICEOUTPUT=$5
-</code></pre><pre><code>OUT&#95;STR=`/usr/bin/printf &quot;%b&quot; &quot;This is the Nagios Monitoring System sending a \ $NOTIFICATIONTYPE notification. The Service $SERVICEDESC at host $HOSTALIAS \ is in state $SERVICESTATE. This is the service output: $SERVICEOUTPUT.&quot;`
-</code></pre><pre><code>play&#95;file=&quot;/tmp/asterisk&#95;nagios&quot; bf=&quot;$play&#95;file.wav&quot; cf=&quot;$play&#95;file.call&quot; lf=&quot;$play&#95;file.log&quot;
-</code></pre><pre><code> CHANNEL=&quot;SIP/&#40;peer&#41;/&#40;no to dial&#41;&quot; CALLER&#95;ID=&quot;Nagios &quot; echo &quot;$OUT&#95;STR&quot; &gt; $lf echo &quot;$OUT&#95;STR&quot; | /usr/bin/text2wave -scale 1.5 -F 8000 -o $bf echo &quot;Channel: $CHANNEL&quot; &gt; $cf echo &quot;WaitTime: 60&quot; &gt;&gt; $cf echo &quot;MaxRetries: 3&quot; &gt;&gt; $cf echo &quot;CallerId: $CALLER&#95;ID&quot; &gt;&gt; $cf echo &quot;Application: Playback&quot; &gt;&gt; $cf echo &quot;Data: $play&#95;file&quot; &gt;&gt; $cf sudo -u www-data cp $cf /var/spool/asterisk/outgoing rm $cf
-</code></pre><p>Das wars. Festival ist nur als englische Version erhältlich (es gibt zwar deutsche Anpassungen, hab ich aber noch nicht ausprobiert), es gibt jedoch unter <a href="http://www.cepstral.com">http://www.cepstral.com</a> sehr gut klingende englische und deutsche Stimmen- die kosten so um die 30$. Viel Spaß.</p>
+    <p>Da wir ja bei uns eine <a href='http://www.asterisk.org'>Asterisk</a>-Telefonanlage im Einsatz haben (Hint: wir verkaufen die auch!) und außerdem ein Nagios-Monitoringsystem (NMS: Network Management System), lag die Idee ja nahe, Nagios über Asterisk reden zu lassen. Dazu habe ich folgendes gemacht: Im Nagios ein neues Kommando notify-by-asterisk angelegt, dass im entsprechenden Kontakt angegeben wird. Das Kommando selbst ist recht simpel:</p><pre><code># 'notify-by-asterisk' command definition define command{ command&#95;name notify-by-asterisk command&#95;line /usr/local/nagios/bin/asterisk&#95;call.sh $NOTIFICATIONTYPE$ $SERVICEDESC$ $HOSTALIAS$ $SERVICESTATE$ $SERVICEOUTPUT$ }</code></pre><p>Das Skript asterisk&#95;call.sh ist ein einfaches Shellskript, das zuerst einen Textstring erzeugt, diesen dann durch Festival jagt (erzeugt eine Wav-Datei) und anschließend eine Asterisk-Call-Datei erzeugt, die dann in das outgoing-Verzeichnis von Asterisk kopiert wird. Asterisk nimmt die Datei, generiert einen Anruf und spielt die wav-Datei ab.</p><p><img src="/img/uploads/2006/03/103-0391_img.jpg" alt="103-0391&#95;img.jpg" title="103-0391_img.jpg" /></p><p>Die Lösung funktioniert auf unserem System. Damit sie auch woanders läuft müssen noch ein paar Einstellungen vorgenommen werden:</p><ul><li>visudo ausführen: Der Nagios-User (bei mir: nagios) braucht das Recht, eine Datei als User www-data (unter dem läuft Asterisk bei mir. Ist der Web-User weil ich zusätzlich noch AMP im Einsatz habe und hier gibt es Rechtekonflikte, wenn AMP als Webapplikation nicht auf die Asteriskdateien zugreifen darf.) in das Asterisk outgoing-Verzeichnis (<em>/var/spool/asterisk/outgoing</em>) zu dürfen:</li><li>nagios ALL = (www-data NOPASSWD:) /bin/cp</li><li>Die Datei asterisk&#95;call.sh anpassen und für nagios ausführbar in <em>/usr/local/nagios/bin</em> (oder woanders, dann aber das Nagios-Kommando anpassen) zur Verfügung stellen:</li></ul><p><!&ndash; &ndash;></p><pre><code>#!/bin/sh</code></pre><pre><code>NOTIFICATIONTYPE=$1 SERVICEDESC=$2 HOSTALIAS=$3 SERVICESTATE=$4 SERVICEOUTPUT=$5</code></pre><pre><code>OUT&#95;STR=`/usr/bin/printf &quot;%b&quot; &quot;This is the Nagios Monitoring System sending a \ $NOTIFICATIONTYPE notification. The Service $SERVICEDESC at host $HOSTALIAS \ is in state $SERVICESTATE. This is the service output: $SERVICEOUTPUT.&quot;`</code></pre><pre><code>play&#95;file=&quot;/tmp/asterisk&#95;nagios&quot; bf=&quot;$play&#95;file.wav&quot; cf=&quot;$play&#95;file.call&quot; lf=&quot;$play&#95;file.log&quot;</code></pre><pre><code> CHANNEL=&quot;SIP/&#40;peer&#41;/&#40;no to dial&#41;&quot; CALLER&#95;ID=&quot;Nagios &quot; echo &quot;$OUT&#95;STR&quot; &gt; $lf echo &quot;$OUT&#95;STR&quot; | /usr/bin/text2wave -scale 1.5 -F 8000 -o $bf echo &quot;Channel: $CHANNEL&quot; &gt; $cf echo &quot;WaitTime: 60&quot; &gt;&gt; $cf echo &quot;MaxRetries: 3&quot; &gt;&gt; $cf echo &quot;CallerId: $CALLER&#95;ID&quot; &gt;&gt; $cf echo &quot;Application: Playback&quot; &gt;&gt; $cf echo &quot;Data: $play&#95;file&quot; &gt;&gt; $cf sudo -u www-data cp $cf /var/spool/asterisk/outgoing rm $cf</code></pre><p>Das wars. Festival ist nur als englische Version erhältlich (es gibt zwar deutsche Anpassungen, hab ich aber noch nicht ausprobiert), es gibt jedoch unter <a href="http://www.cepstral.com">http://www.cepstral.com</a> sehr gut klingende englische und deutsche Stimmen- die kosten so um die 30$. Viel Spaß.</p>
 </div>
 
 <div id="post-tags">
@@ -140,15 +137,6 @@
         
     </div>
 
-    
-    <div id="disqus_thread" style="margin-top:20px;" class="hidden-print"></div>
-    <script type="text/javascript">
-        (function() {
-            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-            dsq.src = '//agynamix.disqus.com/embed.js';
-            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-        })();
-    </script>
     
 
 
@@ -206,11 +194,11 @@
     <h2 class="post-title">Recent Posts</h2>
     <ul class="post-list">
       
+      <li><a href="/posts/2015-10-31-compiler-fails-with-linux-dir-encrypt.html" class="no-underline">Scala compiler fails with Linux directory encryption</a></li>
+      
+      <li><a href="/posts/2015-10-05-converting-old-wordpress-posts.html" class="no-underline">Converting my old Wordpress posts to Markdown</a></li>
+      
       <li><a href="/posts/2015-09-22-doo-and-figwheel.html" class="no-underline">ClojureScript Testing with Doo and Figwheel</a></li>
-      
-      <li><a href="/posts/2015-09-21-tunneling-ssh-connections.html" class="no-underline">Tunneling SSH Connections</a></li>
-      
-      <li><a href="/posts/2015-07-31-a-new-blog.html" class="no-underline">A New Time, a New Blog</a></li>
       
     </ul>
   </div>
@@ -253,6 +241,8 @@
       
       <li><a href="/tags/bug-tracking.html" class="no-underline">bug-tracking</a></li>
       
+      <li><a href="/tags/Scala.html" class="no-underline">Scala</a></li>
+      
       <li><a href="/tags/business.html" class="no-underline">business</a></li>
       
       <li><a href="/tags/docbook.html" class="no-underline">docbook</a></li>
@@ -265,11 +255,17 @@
       
       <li><a href="/tags/subversion.html" class="no-underline">subversion</a></li>
       
+      <li><a href="/tags/Linux.html" class="no-underline">Linux</a></li>
+      
+      <li><a href="/tags/Clojure.html" class="no-underline">Clojure</a></li>
+      
       <li><a href="/tags/gps.html" class="no-underline">gps</a></li>
       
       <li><a href="/tags/fritzbox-snom-phone.html" class="no-underline">fritzbox-snom-phone</a></li>
       
       <li><a href="/tags/dobudish.html" class="no-underline">dobudish</a></li>
+      
+      <li><a href="/tags/Ubuntu.html" class="no-underline">Ubuntu</a></li>
       
       <li><a href="/tags/itunes.html" class="no-underline">itunes</a></li>
       
@@ -379,15 +375,19 @@
   <!--<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>-->
 
   <!-- Bootstrap Core JavaScript -->
-  <script src="../js/bootstrap.min.js" type="text/javascript"></script>
+  <script src="/js/bootstrap.min.js" type="text/javascript"></script>
 
   <!-- Custom Theme JavaScript -->
-  <script src="../js/clean-blog.js" type="text/javascript"></script>
+  <script src="/js/clean-blog.js" type="text/javascript"></script>
 
   <script src="https://squaresend.com/squaresend.js"></script>
 
-  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
+  <script src="/js/highlight.pack.js" type="text/javascript"></script>
+  <!-- <script>hljs.initHighlightingOnLoad();</script> -->
+
+  <script type="text/javascript">
+    hljs.initHighlightingOnLoad();
+  </script>
 
   <script>
     sqs_title = "Drop Us a Line!";

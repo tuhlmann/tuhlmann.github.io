@@ -12,18 +12,21 @@
   <title>AGYNAMIX: Dopus 0.9.9 released</title>
 
   <!-- Bootstrap Core CSS -->
-  <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
   <!-- Custom CSS -->
-  <link href="../css/clean-blog.css" rel="stylesheet" type="text/css" />
+  <link href="/css/clean-blog.css" rel="stylesheet" type="text/css" />
 
   <!-- Custom Fonts -->
   <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+  <!-- <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'> -->
+  <link href='https://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700italic,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Noto+Sans:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+  <!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'> -->
   <!--<link href='http://fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700' rel='stylesheet'
         type='text/css'>-->
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/styles/default.min.css">
+
 
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
@@ -105,14 +108,14 @@
 <div id="post">
     <div class="post-header">
     <div id="post-meta" class="row">
-        <div class="col-lg-6">March 22, 2007</div>
+        <div class="col-lg-6">22. März 2007</div>
         
     </div>
     <h2>Dopus 0.9.9 released</h2>
 </div>
 <div>
     
-    <p>Hi everybody, right now (well actually, a few minutes ago) I released a new version of the Docbook Publishing Tool <a href='http://cms.agynamix.de/downloads/cat&#95;view-2.html'>&#42;&#42;Dopus&#42;&#42;</a>. I'm sorry for the quietness around but I was very busy with projects at my customers places, own projects and, of course, the very cool EclipseCon. Anyway, without boring you to dust, here are the new features of this release:<a href='/img/uploads/2007/03/img&#95;1673.jpg "img&#95;1673.jpg"'><img src="/img/uploads/2007/03/img&#95;1673.jpg" alt="img&#95;1673.jpg" /></a></p><ul><li>Some people reguested Docbook Slides support. Well, here it is. Dopus does not yet support SVG or htmlhelp for Docbook Slides (you are welcome to help me figure out why). But it does support: PDF, HTML, XHTML and the table and frame versions of HTML and XHTML. To create a Slides document, just type:<a href='/img/uploads/2007/03/img&#95;1673.jpg "img&#95;1673.jpg"'></a><em>generator.bat fluffyslides create slides</em> After that, you can use these targets to generate output:<ul><li>pdf</li><li>html</li><li>tablehtml</li><li>framehtml</li><li>xhtml</li><li>tablexhtml</li><li>framexhtml</li></ul></li><li>Dopus is now packaged on a Mac. Ant on Unix systems supports the setting of the executable flag for files. So now when you unpack the Dopus archive you don't have to change the file mode of generator.sh anymore- it works out of the box.</li></ul><p>You can download Dopus as usual in our<a href='http://cms.agynamix.de/downloads/cat&#95;view-2.html'></a> <a href='http://cms.agynamix.de/downloads/cat&#95;view-2.html'>download area</a>. Enjoy!</p>
+    <p>Hi everybody, right now (well actually, a few minutes ago) I released a new version of the Docbook Publishing Tool <a href='http://cms.agynamix.de/downloads/cat_view-2.html'><strong>Dopus</strong></a>. I'm sorry for the quietness around but I was very busy with projects at my customers places, own projects and, of course, the very cool EclipseCon. Anyway, without boring you to dust, here are the new features of this release:<a href='/img/uploads/2007/03/img_1673.jpg "img_1673.jpg"'><img src="/img/uploads/2007/03/img_1673.jpg" alt="img&#95;1673.jpg" /></a></p><ul><li>Some people reguested Docbook Slides support. Well, here it is. Dopus does not yet support SVG or htmlhelp for Docbook Slides (you are welcome to help me figure out why). But it does support: PDF, HTML, XHTML and the table and frame versions of HTML and XHTML. To create a Slides document, just type:<a href='/img/uploads/2007/03/img_1673.jpg "img_1673.jpg"'></a><em>generator.bat fluffyslides create slides</em> After that, you can use these targets to generate output:<ul><li>pdf</li><li>html</li><li>tablehtml</li><li>framehtml</li><li>xhtml</li><li>tablexhtml</li><li>framexhtml</li></ul></li><li>Dopus is now packaged on a Mac. Ant on Unix systems supports the setting of the executable flag for files. So now when you unpack the Dopus archive you don't have to change the file mode of generator.sh anymore- it works out of the box.</li></ul><p>You can download Dopus as usual in our<a href='http://cms.agynamix.de/downloads/cat_view-2.html'></a> <a href='http://cms.agynamix.de/downloads/cat_view-2.html'>download area</a>. Enjoy!</p>
 </div>
 
 <div id="post-tags">
@@ -132,15 +135,6 @@
         
     </div>
 
-    
-    <div id="disqus_thread" style="margin-top:20px;" class="hidden-print"></div>
-    <script type="text/javascript">
-        (function() {
-            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-            dsq.src = '//agynamix.disqus.com/embed.js';
-            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-        })();
-    </script>
     
 
 
@@ -198,11 +192,11 @@
     <h2 class="post-title">Recent Posts</h2>
     <ul class="post-list">
       
+      <li><a href="/posts/2015-10-31-compiler-fails-with-linux-dir-encrypt.html" class="no-underline">Scala compiler fails with Linux directory encryption</a></li>
+      
+      <li><a href="/posts/2015-10-05-converting-old-wordpress-posts.html" class="no-underline">Converting my old Wordpress posts to Markdown</a></li>
+      
       <li><a href="/posts/2015-09-22-doo-and-figwheel.html" class="no-underline">ClojureScript Testing with Doo and Figwheel</a></li>
-      
-      <li><a href="/posts/2015-09-21-tunneling-ssh-connections.html" class="no-underline">Tunneling SSH Connections</a></li>
-      
-      <li><a href="/posts/2015-07-31-a-new-blog.html" class="no-underline">A New Time, a New Blog</a></li>
       
     </ul>
   </div>
@@ -245,6 +239,8 @@
       
       <li><a href="/tags/bug-tracking.html" class="no-underline">bug-tracking</a></li>
       
+      <li><a href="/tags/Scala.html" class="no-underline">Scala</a></li>
+      
       <li><a href="/tags/business.html" class="no-underline">business</a></li>
       
       <li><a href="/tags/docbook.html" class="no-underline">docbook</a></li>
@@ -257,11 +253,17 @@
       
       <li><a href="/tags/subversion.html" class="no-underline">subversion</a></li>
       
+      <li><a href="/tags/Linux.html" class="no-underline">Linux</a></li>
+      
+      <li><a href="/tags/Clojure.html" class="no-underline">Clojure</a></li>
+      
       <li><a href="/tags/gps.html" class="no-underline">gps</a></li>
       
       <li><a href="/tags/fritzbox-snom-phone.html" class="no-underline">fritzbox-snom-phone</a></li>
       
       <li><a href="/tags/dobudish.html" class="no-underline">dobudish</a></li>
+      
+      <li><a href="/tags/Ubuntu.html" class="no-underline">Ubuntu</a></li>
       
       <li><a href="/tags/itunes.html" class="no-underline">itunes</a></li>
       
@@ -371,15 +373,19 @@
   <!--<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>-->
 
   <!-- Bootstrap Core JavaScript -->
-  <script src="../js/bootstrap.min.js" type="text/javascript"></script>
+  <script src="/js/bootstrap.min.js" type="text/javascript"></script>
 
   <!-- Custom Theme JavaScript -->
-  <script src="../js/clean-blog.js" type="text/javascript"></script>
+  <script src="/js/clean-blog.js" type="text/javascript"></script>
 
   <script src="https://squaresend.com/squaresend.js"></script>
 
-  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
+  <script src="/js/highlight.pack.js" type="text/javascript"></script>
+  <!-- <script>hljs.initHighlightingOnLoad();</script> -->
+
+  <script type="text/javascript">
+    hljs.initHighlightingOnLoad();
+  </script>
 
   <script>
     sqs_title = "Drop Us a Line!";

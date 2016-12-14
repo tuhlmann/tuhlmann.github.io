@@ -18,10 +18,10 @@
   <link href="/css/clean-blog.css" rel="stylesheet" type="text/css" />
 
   <!-- Custom Fonts -->
-  <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
   <!-- <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'> -->
-  <link href='https://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700italic,700' rel='stylesheet' type='text/css'>
-  <link href='https://fonts.googleapis.com/css?family=Noto+Sans:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700italic,700' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Noto+Sans:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
   <!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'> -->
   <!--<link href='http://fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700' rel='stylesheet'
         type='text/css'>-->
@@ -36,6 +36,14 @@
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
   <![endif]-->
+
+  <!-- Begin Cookie Consent plugin by Silktide - http://silktide.com/cookieconsent -->
+  <script type="text/javascript">
+    window.cookieconsent_options = {"message":"This website uses cookies to ensure you get the best experience on our website","dismiss":"Got it!","learnMore":"More info","link":"https://silktide.com/privacy-policy/","theme":"dark-bottom"};
+  </script>
+
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/1.0.9/cookieconsent.min.js"></script>
+  <!-- End Cookie Consent plugin -->
 
 </head>
 
@@ -116,7 +124,11 @@
 <div>
     
     <h2><a name="problem"></a>Problem</h2>You want to access a firewalled server from your local machine which has a dynamic IP assigned by your internet provider that changes regularly. The server you want to access has a firewall that whitelists the IP addresses that are allowed to access.<h2><a name="solution"></a>Solution</h2>The solution I found working for me is to tunnel all traffic to these restricted servers through a machine that has a fixed IP address, in my case a web server I use for lots of other purposes.You should be able to ssh into that server and add ssh keys. If the firewalled machine does not have a dns’ed IP address you may need to edit your remote server’s <code>/etc/hosts</code> file to add these servers there.<h2><a name="browser&#95;access"></a>Browser Access</h2>In order to access a firewalled server with a browser, I’m using a SOCKS proxy that tunnels traffic through my remote server:<pre><code>ssh -CN -D 9050 user@my-remote-server
-</code></pre><p>This creates a SOCKS proxy that you can access at <a href='localhost:9050'>localhost:9050</a>. I found it easiest to use with Firefox and the FoxyProxy plugin. You can give that plugin a url mask- if that matches it will use the SOCKS proxy, otherwise it will use the default connection.</p><p>Here are my settings for the SOCKS proxy within FoxyProxy:</p><p><img src="/img/posts/2015-09-21/foxyproxy_1.png" alt="FoxyProxy SOCKS Config" /></p><p><img src="/img/posts/2015-09-21/foxyproxy_2.png" alt="FoxyProxy Details" /></p><h2><a name="ssh&#95;access"></a>SSH Access</h2>Establishing ssh access is a tad bit more involved, but not too much. It also uses a ssh tunnel through the fixed IP remote server.I set up a ssh config that allows me to type <code>ssh firewalled-server</code> and get a connection from my dynamic IP, without having to login to the remote machine and open another ssh session from there.<p>In your <code>&#126;/.ssh</code> directory create a <code>config</code> file that will contain entries like the following, separated by a blank line:</p><pre><code>Host firewalled-server
+</code></pre><p>This creates a SOCKS proxy that you can access at <a href='localhost:9050'>localhost:9050</a>. I found it easiest to use with Firefox and the FoxyProxy plugin. You can give that plugin a url mask- if that matches it will use the SOCKS proxy, otherwise it will use the default connection.</p><p>Here are my settings for the SOCKS proxy within FoxyProxy:</p><p><img src="/img/posts/2015-09-21/foxyproxy_1.png" alt="FoxyProxy SOCKS Config" /></p><p><img src="/img/posts/2015-09-21/foxyproxy_2.png" alt="FoxyProxy Details" /></p><p><b>Update 7.5.2016:</b> As <a href='https://twitter.com/d6y'>Richard</a> reports, if you are on a Mac you can configure its on board socks proxy like so:</p><pre><code># enable it:
+sudo networksetup -setsocksfirewallproxy Wi-Fi localhost 9050
+</code></pre><pre><code># disable it:
+sudo networksetup -setsocksfirewallproxystate Wi-Fi off
+</code></pre><p>The <code>networksetup</code> command also has an option <code>-setproxybypassdomains</code> to exclude certain domains from using the configured proxy.</p><h2><a name="ssh&#95;access"></a>SSH Access</h2>Establishing ssh access is a tad bit more involved, but not too much. It also uses a ssh tunnel through the fixed IP remote server.I set up a ssh config that allows me to type <code>ssh firewalled-server</code> and get a connection from my dynamic IP, without having to login to the remote machine and open another ssh session from there.<p>In your <code>&#126;/.ssh</code> directory create a <code>config</code> file that will contain entries like the following, separated by a blank line:</p><pre><code>Host firewalled-server
 Hostname firewalled-server
 User my-username
 ForwardAgent yes

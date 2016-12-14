@@ -441,5 +441,17 @@ body {
 @media print {
   .hidden-print {
     display: none; } }
+.post-list-item {
+  display: -webkit-flex;
+  display: flex;
+  justify-content: center; }
+  .post-list-item .post-list-date {
+    flex: 0 0 12rem; }
+  .post-list-item .post-list-sep {
+    flex: 0 0 1.5rem; }
+  .post-list-item .post-list-sep::after {
+    content: " - "; }
+  .post-list-item .post-list-title {
+    flex: 1 0 0; }
 
 /*# sourceMappingURL=clean-blog.css.map */
